@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Каталог — Mobilix</title>
+
+    <link rel="stylesheet" href="styles.css">
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+
+<section class="catalog-page">
+
+    <a href="index.html" class="back-link">← На головну</a>
+
+    <div class="page-hero">
+        <span>Mobilix</span>
+        <h1>Каталог товарів</h1>
+        <p>Оберіть потрібний товар. При натисканні відкриється окрема сторінка товару.</p>
+    </div>
+
+    <div class="catalog-controls">
+        <input type="text" id="searchInput" placeholder="Пошук товару...">
+
+        <select id="categoryFilter">
+            <option value="all">Усі категорії</option>
+            <option value="Чохли">Чохли</option>
+            <option value="Зарядні пристрої">Зарядні пристрої</option>
+            <option value="Кабелі">Кабелі</option>
+            <option value="Навушники">Навушники</option>
+            <option value="Повербанки">Повербанки</option>
+            <option value="Тримачі">Тримачі</option>
+        </select>
+    </div>
+
+    <div class="products-grid" id="productsGrid"></div>
+
+</section>
+
+<script src="products.js"></script>
+<script src="catalog.js"></script>
+
+</body>
+</html>
