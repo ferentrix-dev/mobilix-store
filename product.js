@@ -81,10 +81,10 @@ function toggleFavorite(productId) {
 
     if (favorites.includes(productId)) {
         favorites = favorites.filter(id => id !== productId);
-        alert("Товар видалено з обраного");
+        showToast("Товар видалено з обраного");
     } else {
         favorites.push(productId);
-        alert("Товар додано в обране");
+        showToast("Товар додано в обране");
     }
 
     saveFavorites(favorites);

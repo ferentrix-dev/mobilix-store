@@ -63,7 +63,9 @@ function renderCart() {
 
         <div class="cart-summary">
             <h2>Разом: ${total} ₴</h2>
-            <button>Оформити замовлення</button>
+            <a href="checkout.html" class="checkout-btn">
+    Оформити замовлення
+</a>
         </div>
     `;
 }

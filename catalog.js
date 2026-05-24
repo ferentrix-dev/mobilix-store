@@ -154,7 +154,7 @@ function addToCompare(productId,event){
     }
 
     if(compare.length >= 4){
-        alert("Максимум 4 товари");
+        showToast("Максимум 4 товари для порівняння", "error");("Максимум 4 товари");
         return;
     }
 
@@ -165,5 +165,4 @@ function addToCompare(productId,event){
         JSON.stringify(compare)
     );
 
-    alert("Товар додано");
-}
+showToast("Товар додано до порівняння");    }

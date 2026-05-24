@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Оформлення замовлення — Mobilix</title>
+
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+
+<section class="checkout-page">
+
+    <a href="cart.html" class="back-link">← Назад до кошика</a>
+
+    <div class="page-hero">
+        <span>Mobilix</span>
+        <h1>Оформлення замовлення</h1>
+        <p>Заповніть дані для доставки Новою Поштою.</p>
+    </div>
+
+    <form class="checkout-form" id="checkoutForm">
+
+        <input type="text" id="customerName" placeholder="Ваше ім’я" required>
+
+        <input type="tel" id="customerPhone" placeholder="Номер телефону" required>
+
+        <input type="text" id="cityInput" placeholder="Місто" autocomplete="off" required>
+        <div class="suggestions-list" id="citiesList"></div>
+
+        <select id="warehouseSelect" required>
+            <option value="">Спочатку оберіть місто</option>
+        </select>
+
+        <textarea id="customerComment" placeholder="Коментар до замовлення"></textarea>
+
+        <button type="submit">Підтвердити замовлення</button>
+
+    </form>
+
+</section>
+
+<script src="products.js"></script>
+<script src="toast.js"></script>
+<script src="checkout.js"></script>
+
+</body>
+</html>

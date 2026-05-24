@@ -46,10 +46,12 @@
             <a href="https://maps.google.com/?q=Хмельницький" target="_blank"><li><i class="fa-solid fa-location-dot"></i> Хмельницький</li></a>
             <li>
     <a href="favorites.html">
-        <i class="fa-regular fa-heart"></i> Вибране
+        <i class="fa-regular fa-heart"></i>
+        Вибране
+        <span id="favoritesCount" class="header-counter">0</span>
     </a>
 </li>
-            <li><i class="fa-regular fa-user"></i> Ввійти / Реєстрація</li>
+      <li><i class="fa-regular fa-user"></i> (Розробляється)</li>
         </ul>
     </div>
 
@@ -71,13 +73,19 @@
         placeholder="Пошук товарів..."
     >
         <select id="headerCategorySelect" class="header-category-select">
-        <option value="all">Усі категорії</option>
-        <option value="Чохли">Чохли</option>
-        <option value="Зарядні пристрої">Зарядні пристрої</option>
-        <option value="Кабелі">Кабелі</option>
-        <option value="Навушники">Навушники</option>
-        <option value="Повербанки">Повербанки</option>
-        <option value="Тримачі">Тримачі</option>
+            <option value="all">Усі категорії</option>
+
+<option value="Чохли">Чохли</option>
+<option value="Зарядні пристрої">Зарядні пристрої</option>
+<option value="Кабелі">Кабелі</option>
+<option value="Навушники">Навушники</option>
+<option value="Повербанки">Повербанки</option>
+<option value="Тримачі">Тримачі</option>
+<option value="Захисне скло">Захисне скло</option>
+<option value="Смарт-годинники">Смарт-годинники</option>
+<option value="Портативні колонки">Портативні колонки</option>
+<option value="Аксесуари">Аксесуари</option>
+<option value="Карти пам'яті">Карти пам'яті</option>
     </select>
 
     <button class="search-btn" id="headerSearchBtn">
@@ -88,16 +96,22 @@
 
     <div class="header-right">
         <a href="compare.html" class="compare">
-            <i class="fa-solid fa-scale-balanced"></i>
-            <span>Порівняння</span>
-        </a>
+    <i class="fa-solid fa-scale-balanced"></i>
+
+    <span>
+        Порівняння
+        <span id="compareCount" class="header-counter">
+            0
+        </span>
+    </span>
+</a>
 
        <a href="cart.html" class="cart">
     <i class="fa-solid fa-cart-shopping"></i>
 
     <div class="cart-info">
         <span>Кошик</span>
-        <p>0 ₴</p>
+        <p><span id="cartCount">0</span> товарів · <span id="cartTotal">0</span> ₴</p>  
     </div>
 </a>
 </header>
@@ -105,29 +119,86 @@
 <section class="hero-section">
 
     <aside class="category-sidebar">
-        <div class="category-item"><i class="fa-solid fa-tv"></i><span>Електроніка</span></div>
-        <div class="category-item"><i class="fa-solid fa-laptop"></i><span>Комп'ютери та ноутбуки</span></div>
-        <div class="category-item"><i class="fa-solid fa-mobile-screen"></i><span>Смартфони та гаджети</span></div>
-        <div class="category-item"><i class="fa-solid fa-blender"></i><span>Побутова техніка</span></div>
-        <div class="category-item"><i class="fa-solid fa-house"></i><span>Дім та сад</span></div>
-        <div class="category-item"><i class="fa-solid fa-shirt"></i><span>Одяг та взуття</span></div>
-        <div class="category-item"><i class="fa-solid fa-heart-pulse"></i><span>Краса та здоров'я</span></div>
-        <div class="category-item"><i class="fa-solid fa-basketball"></i><span>Спорт та відпочинок</span></div>
-        <div class="category-item"><i class="fa-solid fa-car"></i><span>Автотовари</span></div>
-        <div class="category-item"><i class="fa-solid fa-baby"></i><span>Дитячі товари</span></div>
-        <div class="category-item"><i class="fa-solid fa-book"></i><span>Книги та канцелярія</span></div>
-        <div class="category-item"><i class="fa-solid fa-grip"></i><span>Ще категорії</span></div>
+        <a href="catalog.html?category=Чохли" class="category-item">
+    <i class="fa-solid fa-mobile-screen"></i>
+    <span>Чохли</span>
+</a>
+
+<a href="catalog.html?category=Зарядні пристрої" class="category-item">
+    <i class="fa-solid fa-bolt"></i>
+    <span>Зарядні пристрої</span>
+</a>
+
+<a href="catalog.html?category=Кабелі" class="category-item">
+    <i class="fa-solid fa-plug"></i>
+    <span>Кабелі</span>
+</a>
+
+<a href="catalog.html?category=Навушники" class="category-item">
+    <i class="fa-solid fa-headphones"></i>
+    <span>Навушники</span>
+</a>
+
+<a href="catalog.html?category=Повербанки" class="category-item">
+    <i class="fa-solid fa-battery-full"></i>
+    <span>Повербанки</span>
+</a>
+
+<a href="catalog.html?category=Тримачі" class="category-item">
+    <i class="fa-solid fa-car"></i>
+    <span>Тримачі</span>
+</a>
+
+<a href="catalog.html?category=Захисне скло" class="category-item">
+    <i class="fa-solid fa-shield"></i>
+    <span>Захисне скло</span>
+</a>
+
+<a href="catalog.html?category=Смарт-годинники" class="category-item">
+    <i class="fa-solid fa-clock"></i>
+    <span>Смарт-годинники</span>
+</a>
+
+<a href="catalog.html?category=Портативні колонки" class="category-item">
+    <i class="fa-solid fa-volume-high"></i>
+    <span>Портативні колонки</span>
+</a>
+
+<a href="catalog.html?category=Аксесуари" class="category-item">
+    <i class="fa-solid fa-keyboard"></i>
+    <span>Аксесуари</span>
+</a>
+
+<a href="catalog.html?category=Карти пам'яті" class="category-item">
+    <i class="fa-solid fa-memory"></i>
+    <span>Карти пам'яті</span>
+</a>
+
+<a href="catalog.html" class="category-item">
+    <i class="fa-solid fa-ellipsis"></i>
+    <span>Усі товари</span>
+</a>
     </aside>
 
     <div class="hero-right">
 
         <div class="hero-banner">
             <div class="hero-content">
-                <h1>Нові смартфони <br> з найкращими камерами</h1>
+                <h1>
+        Нові чохли <br>
+        для вашого смартфона
+    </h1>
 
-                <p>Відкрийте для себе нові можливості мобільної фотографії</p>
+    <p>
+        Стильний дизайн, надійний захист та моделі
+        для популярних смартфонів
+    </p>
 
-                <button>Переглянути товари</button>
+    <a href="catalog.html?category=Чохли">
+        <button>
+            Переглянути товари
+        </button>
+    </a>
             </div>
 
             <img src="" alt="">
@@ -184,40 +255,41 @@
 
     <div class="categories-grid">
 
-        <div class="popular-card">
-            <img src="Images/Зарядний пристрій.jpg" alt="">
-            <span>Зарядні пристрої</span>
-        </div>
+        <a href="catalog.html?category=Зарядні пристрої" class="popular-card">
+    <img src="Images/Зарядний пристрій.jpg" alt="">
+    <span>Зарядні пристрої</span>
+</a>
 
-        <div class="popular-card">
-            <img src="Images/Чохол.png" alt="">
-            <span>Чохли</span>
-        </div>
+<a href="catalog.html?category=Чохли" class="popular-card">
+    <img src="Images/Чохол.png" alt="">
+    <span>Чохли</span>
+</a>
 
-        <div class="popular-card">
-            <img src="Images/Headphones.png" alt="">
-            <span>Навушники</span>
-        </div>
+<a href="catalog.html?category=Навушники" class="popular-card">
+    <img src="Images/Headphones.png" alt="">
+    <span>Навушники</span>
+</a>
 
-        <div class="popular-card">
-            <img src="Images/Powerbank.jpg" alt="">
-            <span>Повербанки</span>
-        </div>
+<a href="catalog.html?category=Повербанки" class="popular-card">
+    <img src="Images/Powerbank.jpg" alt="">
+    <span>Повербанки</span>
+</a>
 
-        <div class="popular-card">
-            <img src="Images/Cable.png" alt="">
-            <span>Кабелі</span>
-        </div>
+<a href="catalog.html?category=Кабелі" class="popular-card">
+    <img src="Images/Cable.png" alt="">
+    <span>Кабелі</span>
+</a>
 
-        <div class="popular-card">
-            <img src="Images/Тримач.jpg" alt="">
-            <span>Тримачі</span>
-        </div>
+<a href="catalog.html?category=Тримачі" class="popular-card">
+    <img src="Images/Тримач.jpg" alt="">
+    <span>Тримачі</span>
+</a>
 
     </div>
 
 </section>
 <script src="products.js"></script>
+<script src="toast.js"></script>    
 <script>
     const burgerBtn = document.querySelector('.burger-btn');
     const topbarMenu = document.querySelector('.topbar-menu');
@@ -247,26 +319,74 @@
         }
     };
 
-    function updateCartPrice(){
-        const cart = JSON.parse(localStorage.getItem("cart")) || [];
-        let total = 0;
+    function updateCartInfo(){
+    const cart = JSON.parse(localStorage.getItem("cart")) || [];
 
-        cart.forEach(item => {
-            const product = products.find(p => p.id === item.id);
+    let total = 0;
+    let count = 0;
 
-            if(product){
-                total += product.price * item.quantity;
-            }
-        });
+    cart.forEach(item => {
+        const product = products.find(p => p.id === item.id);
 
-        const cartPrice = document.querySelector(".cart-info p");
-
-        if(cartPrice){
-            cartPrice.textContent = total + " ₴";
+        if(product){
+            total += product.price * item.quantity;
+            count += item.quantity;
         }
+    });
+
+    const cartCount = document.getElementById("cartCount");
+    const cartTotal = document.getElementById("cartTotal");
+
+    if(cartCount){
+        cartCount.textContent = count;
     }
 
-    updateCartPrice();
+    if(cartTotal){
+        cartTotal.textContent = total;
+    }
+}
+
+updateCartInfo();
+
+function updateFavoritesCount(){
+
+    const favorites =
+    JSON.parse(
+    localStorage.getItem("favorites")
+    ) || [];
+
+    const counter =
+    document.getElementById(
+    "favoritesCount"
+    );
+
+    if(counter){
+        counter.textContent =
+        favorites.length;
+    }
+}
+
+updateFavoritesCount();
+
+function updateCompareCount(){
+
+    const compare =
+    JSON.parse(
+    localStorage.getItem("compare")
+    ) || [];
+
+    const counter =
+    document.getElementById(
+    "compareCount"
+    );
+
+    if(counter){
+        counter.textContent =
+        compare.length;
+    }
+}
+
+updateCompareCount();
 </script>
 </body>
 </html>
