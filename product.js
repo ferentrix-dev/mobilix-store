@@ -32,9 +32,60 @@ if (!product) {
 
                 <strong>${product.price} ₴</strong>
 
-                <button>Додати у кошик</button>
+                <button onclick="addToCart(${product.id})">
+                    Додати у кошик
+                </button>
+
+                <button 
+                    onclick="toggleFavorite(${product.id})"
+                    class="product-favorite-btn"
+                >
+                    <i class="fa-regular fa-heart"></i>
+                    Додати в обране
+                </button>
             </div>
 
         </div>
     `;
+}
+
+function addToCart(productId) {
+    const cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+    const existingProduct = cart.find(item => item.id === productId);
+
+    if (existingProduct) {
+        existingProduct.quantity += 1;
+    } else {
+        cart.push({
+            id: productId,
+            quantity: 1
+        });
+    }
+
+    localStorage.setItem("cart", JSON.stringify(cart));
+
+    window.location.href = "cart.html";
+}
+
+function getFavorites() {
+    return JSON.parse(localStorage.getItem("favorites")) || [];
+}
+
+function saveFavorites(favorites) {
+    localStorage.setItem("favorites", JSON.stringify(favorites));
+}
+
+function toggleFavorite(productId) {
+    let favorites = getFavorites();
+
+    if (favorites.includes(productId)) {
+        favorites = favorites.filter(id => id !== productId);
+        alert("Товар видалено з обраного");
+    } else {
+        favorites.push(productId);
+        alert("Товар додано в обране");
+    }
+
+    saveFavorites(favorites);
 }

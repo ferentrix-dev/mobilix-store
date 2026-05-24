@@ -42,9 +42,13 @@
         </ul>
 
         <ul class="right-menu">
-            <a href="tel:+38093231678"><li>+38 (093) 23-16-78</li></a>
+            <a href="tel:+380935231678"><li>+38 (093) 23-16-78</li></a>
             <a href="https://maps.google.com/?q=Хмельницький" target="_blank"><li><i class="fa-solid fa-location-dot"></i> Хмельницький</li></a>
-            <li><i class="fa-regular fa-heart"></i> Вибране</li>
+            <li>
+    <a href="favorites.html">
+        <i class="fa-regular fa-heart"></i> Вибране
+    </a>
+</li>
             <li><i class="fa-regular fa-user"></i> Ввійти / Реєстрація</li>
         </ul>
     </div>
@@ -59,33 +63,43 @@
     Каталог товарів
 </a>
 
-    <div class="search-box">
-        <input type="text" placeholder="Пошук товарів...">
+  <div class="search-box">
 
-        <div class="categories">
-            Усі категорії
-            <i class="fa-solid fa-chevron-down"></i>
-        </div>
+    <input 
+        type="text" 
+        id="headerSearchInput"
+        placeholder="Пошук товарів..."
+    >
+        <select id="headerCategorySelect" class="header-category-select">
+        <option value="all">Усі категорії</option>
+        <option value="Чохли">Чохли</option>
+        <option value="Зарядні пристрої">Зарядні пристрої</option>
+        <option value="Кабелі">Кабелі</option>
+        <option value="Навушники">Навушники</option>
+        <option value="Повербанки">Повербанки</option>
+        <option value="Тримачі">Тримачі</option>
+    </select>
 
-        <button class="search-btn">
-            <i class="fa-solid fa-magnifying-glass"></i>
-        </button>
-    </div>
+    <button class="search-btn" id="headerSearchBtn">
+        <i class="fa-solid fa-magnifying-glass"></i>
+    </button>
+
+</div>
 
     <div class="header-right">
-        <div class="compare">
+        <a href="compare.html" class="compare">
             <i class="fa-solid fa-scale-balanced"></i>
             <span>Порівняння</span>
-        </div>
+        </a>
 
-        <div class="cart">
-            <i class="fa-solid fa-cart-shopping"></i>
-            <div class="cart-info">
-                <span>Кошик</span>
-                <p>0 ₴</p>
-            </div>
-        </div>
+       <a href="cart.html" class="cart">
+    <i class="fa-solid fa-cart-shopping"></i>
+
+    <div class="cart-info">
+        <span>Кошик</span>
+        <p>0 ₴</p>
     </div>
+</a>
 </header>
 
 <section class="hero-section">
@@ -203,13 +217,56 @@
     </div>
 
 </section>
+<script src="products.js"></script>
 <script>
     const burgerBtn = document.querySelector('.burger-btn');
     const topbarMenu = document.querySelector('.topbar-menu');
 
-    burgerBtn.addEventListener('click', () => {
+    burgerBtn.onclick = function(){
         topbarMenu.classList.toggle('active');
-    });
+    };
+
+    const searchInput = document.getElementById('headerSearchInput');
+    const searchBtn = document.getElementById('headerSearchBtn');
+    const categorySelect = document.getElementById('headerCategorySelect');
+
+    searchBtn.onclick = function(){
+        const search = searchInput.value.trim();
+        const category = categorySelect.value;
+
+        window.location.href =
+            'catalog.html?search=' +
+            encodeURIComponent(search) +
+            '&category=' +
+            encodeURIComponent(category);
+    };
+
+    searchInput.onkeydown = function(event){
+        if(event.key === 'Enter'){
+            searchBtn.click();
+        }
+    };
+
+    function updateCartPrice(){
+        const cart = JSON.parse(localStorage.getItem("cart")) || [];
+        let total = 0;
+
+        cart.forEach(item => {
+            const product = products.find(p => p.id === item.id);
+
+            if(product){
+                total += product.price * item.quantity;
+            }
+        });
+
+        const cartPrice = document.querySelector(".cart-info p");
+
+        if(cartPrice){
+            cartPrice.textContent = total + " ₴";
+        }
+    }
+
+    updateCartPrice();
 </script>
 </body>
 </html>
