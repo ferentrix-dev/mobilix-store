@@ -1,4 +1,4 @@
-const API_URL = "https://mobilix-backend-production.up.railway.app/";
+const API_URL = "https://mobilix-backend-production.up.railway.app";
 
 const cityInput = document.getElementById("cityInput");
 const citiesList = document.getElementById("citiesList");
