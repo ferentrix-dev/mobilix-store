@@ -11,6 +11,7 @@ cityInput.addEventListener("input", async () => {
     const search = cityInput.value.trim();
 
     if (search.length < 2) {
+        citiesList.innerHTML = "";
         citiesList.style.display = "none";
         return;
     }
@@ -23,7 +24,7 @@ cityInput.addEventListener("input", async () => {
     cities.forEach(city => {
         const item = document.createElement("div");
         item.className = "suggestion-item";
-        item.textContent = city.Description;
+        item.textContent = `${city.Description} (${city.AreaDescription})`;
 
         item.onclick = () => {
             selectedCity = city;
@@ -35,7 +36,7 @@ cityInput.addEventListener("input", async () => {
         citiesList.appendChild(item);
     });
 
-    citiesList.style.display = "block";
+    citiesList.style.display = cities.length ? "block" : "none";
 });
 
 async function loadWarehouses(cityRef) {
@@ -75,23 +76,16 @@ checkoutForm.addEventListener("submit", async (event) => {
     }, 0);
 
     const order = {
-    surname: document.getElementById("customerSurname").value.trim(),
-
-    name: document.getElementById("customerName").value.trim(),
-
-    middleName: document.getElementById("customerMiddleName").value.trim(),
-
-    phone: document.getElementById("customerPhone").value.trim(),
-
-    city: cityInput.value.trim(),
-
-    warehouse: warehouseSelect.value,
-
-    comment: document.getElementById("customerComment").value.trim(),
-
-    items,
-    total
-};
+        surname: document.getElementById("customerSurname").value.trim(),
+        name: document.getElementById("customerName").value.trim(),
+        middleName: document.getElementById("customerMiddleName").value.trim(),
+        phone: document.getElementById("customerPhone").value.trim(),
+        city: cityInput.value.trim(),
+        warehouse: warehouseSelect.value,
+        comment: document.getElementById("customerComment").value.trim(),
+        items,
+        total
+    };
 
     const response = await fetch(`${API_URL}/api/order`, {
         method: "POST",
@@ -104,6 +98,7 @@ checkoutForm.addEventListener("submit", async (event) => {
     if (response.ok) {
         localStorage.removeItem("cart");
         showToast("Замовлення успішно оформлено");
+
         setTimeout(() => {
             window.location.href = "index.html";
         }, 1500);
