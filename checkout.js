@@ -75,16 +75,23 @@ checkoutForm.addEventListener("submit", async (event) => {
     }, 0);
 
     const order = {
-        name: document.getElementById("customerName").value.trim(),
-        surname: document.getElementById("customerSurname").value.trim(),
-        middleName: document.getElementById("customerMiddleName").value.trim(),
-        phone: document.getElementById("customerPhone").value.trim(),
-        city: cityInput.value.trim(),
-        warehouse: warehouseSelect.value,
-        comment: document.getElementById("customerComment").value.trim(),
-        items,
-        total
-    };
+    surname: document.getElementById("customerSurname").value.trim(),
+
+    name: document.getElementById("customerName").value.trim(),
+
+    middleName: document.getElementById("customerMiddleName").value.trim(),
+
+    phone: document.getElementById("customerPhone").value.trim(),
+
+    city: cityInput.value.trim(),
+
+    warehouse: warehouseSelect.value,
+
+    comment: document.getElementById("customerComment").value.trim(),
+
+    items,
+    total
+};
 
     const response = await fetch(`${API_URL}/api/order`, {
         method: "POST",
