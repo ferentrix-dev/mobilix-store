@@ -76,6 +76,8 @@ checkoutForm.addEventListener("submit", async (event) => {
 
     const order = {
         name: document.getElementById("customerName").value.trim(),
+        surname: document.getElementById("customerSurname").value.trim(),
+        middleName: document.getElementById("customerMiddleName").value.trim(),
         phone: document.getElementById("customerPhone").value.trim(),
         city: cityInput.value.trim(),
         warehouse: warehouseSelect.value,
