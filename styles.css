@@ -2251,7 +2251,7 @@ opacity:.9;
     border-radius:10px;
 
     background:white;
-    color:#111;
+    color:#ffffff;
 
     font-weight:600;
     cursor:pointer;
@@ -2266,4 +2266,18 @@ opacity:.9;
 .variant-btn:disabled{
     opacity:.4;
     cursor:not-allowed;
+}
+
+.checkout-btn,
+.checkout-btn:visited{
+    color:white;
+    text-decoration:none;
+}
+
+.checkout-btn:hover{
+    color:white;
+}
+
+.checkout-btn:active{
+    color:white;
 }
