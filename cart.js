@@ -39,6 +39,7 @@ function renderCart() {
 
                         <div class="cart-item-info">
                             <h3>${product.title}</h3>
+                            <p>Варіант: ${item.variant || "Стандартний"}</p>
                             <p>${product.category}</p>
                             <strong>${product.price} ₴</strong>
                         </div>

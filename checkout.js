@@ -67,7 +67,7 @@ checkoutForm.addEventListener("submit", async (event) => {
 
     const items = cart.map(item => {
         const product = products.find(p => p.id === item.id);
-        return `${product.title} x${item.quantity}`;
+        return `${product.title} (${item.variant || "Стандартний"}) x${item.quantity}`;
     }).join("\n");
 
     const total = cart.reduce((sum, item) => {

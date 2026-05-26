@@ -2226,3 +2226,44 @@ opacity:.9;
         padding:36px 16px 50px;
     }
 }
+
+.variant-box{
+    margin-bottom:24px;
+}
+
+.variant-box h4{
+    font-size:16px;
+    font-weight:700;
+    margin-bottom:12px;
+}
+
+.variant-list{
+    display:flex;
+    flex-wrap:wrap;
+    gap:10px;
+}
+
+.variant-btn{
+    height:42px;
+    padding:0 16px;
+
+    border:1px solid #e5e7eb;
+    border-radius:10px;
+
+    background:white;
+    color:#111;
+
+    font-weight:600;
+    cursor:pointer;
+}
+
+.variant-btn.active{
+    background:#2563eb;
+    color:white;
+    border-color:#2563eb;
+}
+
+.variant-btn:disabled{
+    opacity:.4;
+    cursor:not-allowed;
+}
