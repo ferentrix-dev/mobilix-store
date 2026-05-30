@@ -64,7 +64,8 @@ body{
 }
 
 input,
-textarea{
+textarea,
+select{
     width:100%;
     margin-bottom:15px;
     border:1px solid #d1d5db;
@@ -72,6 +73,11 @@ textarea{
     padding:14px;
     font-size:15px;
 }
+
+select{
+    height:50px;
+    background:white;
+}   
 
 textarea{
     resize:none;
@@ -170,11 +176,23 @@ button{
 
 <input type="text" id="title" placeholder="Назва товару">
 
-<input type="text" id="category" placeholder="Категорія">
+<select id="category">
+    <option value="Чохли">Чохли</option>
+    <option value="Зарядні пристрої">Зарядні пристрої</option>
+    <option value="Кабелі">Кабелі</option>
+    <option value="Навушники">Навушники</option>
+    <option value="Повербанки">Повербанки</option>
+    <option value="Тримачі">Тримачі</option>
+    <option value="Захисне скло">Захисне скло</option>
+    <option value="Смарт-годинники">Смарт-годинники</option>
+    <option value="Портативні колонки">Портативні колонки</option>
+    <option value="Аксесуари">Аксесуари</option>
+    <option value="Карти пам'яті">Карти пам'яті</option>
+</select>
 
 <input type="number" id="price" placeholder="Ціна">
 
-<input type="text" id="image" placeholder="Фото URL або шлях">
+<input type="file" id="imageFile" accept="image/*">
 
 <textarea id="description" placeholder="Опис"></textarea>
 
@@ -254,64 +272,51 @@ async function loadProducts(){
 }
 
 async function addProduct(){
-
     const title = document.getElementById("title").value;
     const category = document.getElementById("category").value;
     const price = document.getElementById("price").value;
-    const image = document.getElementById("image").value;
+    const imageFile = document.getElementById("imageFile").files[0];
     const description = document.getElementById("description").value;
 
-    const response = await fetch(
-        `${API_URL}/api/products`,
-        {
-            method:"POST",
-            headers:{
-                "Content-Type":"application/json"
-            },
-            body:JSON.stringify({
-                title,
-                category,
-                price,
-                image,
-                description,
-                variants:[]
-            })
-        }
-    );
+    if(!imageFile){
+        alert("Оберіть фото товару");
+        return;
+    }
+
+    const formData = new FormData();
+    formData.append("image", imageFile);
+
+    const uploadResponse = await fetch(`${API_URL}/api/upload`, {
+        method: "POST",
+        body: formData
+    });
+
+    const uploadData = await uploadResponse.json();
+
+    const response = await fetch(`${API_URL}/api/products`, {
+        method:"POST",
+        headers:{
+            "Content-Type":"application/json"
+        },
+        body:JSON.stringify({
+            title,
+            category,
+            price,
+            image: uploadData.imageUrl,
+            description,
+            variants:[]
+        })
+    });
 
     if(response.ok){
-
         loadProducts();
 
         document.getElementById("title").value = "";
         document.getElementById("category").value = "";
         document.getElementById("price").value = "";
-        document.getElementById("image").value = "";
+        document.getElementById("imageFile").value = "";
         document.getElementById("description").value = "";
-
     }
-
-}
-
-async function deleteProduct(id){
-
-    await fetch(
-        `${API_URL}/api/products/${id}`,
-        {
-            method:"DELETE"
-        }
-    );
-
-    loadProducts();
-
-}
-
-function logout(){
-
-    localStorage.removeItem("adminToken");
-
-    window.location.href = "admin-login.html";
-
 }
 
 loadProducts();
