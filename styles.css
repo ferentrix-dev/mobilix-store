@@ -2281,3 +2281,9 @@ opacity:.9;
 .checkout-btn:active{
     color:white;
 }
+
+.product-stock{
+    margin:10px 0 20px;
+    color:#16a34a;
+    font-weight:700;
+}

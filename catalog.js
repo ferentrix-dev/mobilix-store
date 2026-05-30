@@ -1,3 +1,7 @@
+const API_URL = "https://mobilix-backend-production.up.railway.app";
+
+let products = [];
+
 const productsGrid = document.getElementById("productsGrid");
 const searchInput = document.getElementById("searchInput");
 const categoryFilter = document.getElementById("categoryFilter");
@@ -27,142 +31,120 @@ function toggleFavorite(productId, event) {
     }
 
     saveFavorites(favorites);
-
     filterProducts();
 }
 
 function renderProducts(items) {
-
     productsGrid.innerHTML = "";
 
-    if(items.length === 0){
+    if (items.length === 0) {
         productsGrid.innerHTML = `
             <div class="empty-cart">
                 <h2>Нічого не знайдено</h2>
                 <p>Спробуйте змінити пошук або категорію.</p>
             </div>
         `;
-
         return;
     }
 
     items.forEach(product => {
-
-        const favoriteActive = isFavorite(product.id);
+        const productId = product._id;
+        const favoriteActive = isFavorite(productId);
 
         productsGrid.innerHTML += `
-        <a href="product.html?id=${product.id}" class="product-card">
+            <a href="product.html?id=${productId}" class="product-card">
 
-            <button
-                class="favorite-btn ${favoriteActive ? "active" : ""}"
-                onclick="toggleFavorite(${product.id}, event)"
-                type="button"
-            >
-                <i class="${favoriteActive ? "fa-solid" : "fa-regular"} fa-heart"></i>
-            </button>
+                <button
+                    class="favorite-btn ${favoriteActive ? "active" : ""}"
+                    onclick="toggleFavorite('${productId}', event)"
+                    type="button"
+                >
+                    <i class="${favoriteActive ? "fa-solid" : "fa-regular"} fa-heart"></i>
+                </button>
 
-            <img src="${product.image}" alt="${product.title}">
+                <img src="${product.image}" alt="${product.title}">
 
-            <span class="product-category-label">
-                ${product.category}
-            </span>
+                <span class="product-category-label">
+                    ${product.category}
+                </span>
 
-            <h3>${product.title}</h3>
+                <h3>${product.title}</h3>
 
-            <p>${product.description}</p>
+                <p>${product.description}</p>
 
-            <strong>${product.price} ₴</strong>
+                <strong>${product.price} ₴</strong>
 
-            <div class="product-card-btn">
-                Переглянути товар
-            </div>
+                <div class="product-card-btn">
+                    Переглянути товар
+                </div>
 
-            <button
-    class="compare-btn"
-    onclick="addToCompare(${product.id}, event)"
->
-    ⚖ Додати до порівняння
-</button>
+                <button
+                    class="compare-btn"
+                    onclick="addToCompare('${productId}', event)"
+                    type="button"
+                >
+                    ⚖ Додати до порівняння
+                </button>
 
-        </a>
+            </a>
         `;
     });
 }
 
 function filterProducts() {
-
     const searchValue = searchInput.value.toLowerCase().trim();
-
-    const categoryValue =
-        categoryFilter.value.toLowerCase().trim();
+    const categoryValue = categoryFilter.value.toLowerCase().trim();
 
     const filteredProducts = products.filter(product => {
-
-        const titleMatch =
-            product.title.toLowerCase()
-            .includes(searchValue);
+        const titleMatch = product.title.toLowerCase().includes(searchValue);
 
         const categoryMatch =
             categoryValue === "all" ||
             product.category.toLowerCase().trim() === categoryValue;
 
         return titleMatch && categoryMatch;
-
     });
 
     renderProducts(filteredProducts);
 }
 
-searchInput.addEventListener(
-    "input",
-    filterProducts
-);
-
-categoryFilter.addEventListener(
-    "change",
-    filterProducts
-);
-
-
-/* URL SEARCH */
-
-const urlParams = new URLSearchParams(window.location.search);
-
-const urlSearch =
-    urlParams.get("search") || "";
-
-const urlCategory =
-    urlParams.get("category") || "all";
-
-
-searchInput.value = urlSearch;
-
-categoryFilter.value = urlCategory;
-
-filterProducts();  
-
-function addToCompare(productId,event){
-
+function addToCompare(productId, event) {
     event.preventDefault();
     event.stopPropagation();
 
-    let compare =
-        JSON.parse(localStorage.getItem("compare")) || [];
+    let compare = JSON.parse(localStorage.getItem("compare")) || [];
 
-    if(compare.includes(productId)){
+    if (compare.includes(productId)) {
         return;
     }
 
-    if(compare.length >= 4){
-        showToast("Максимум 4 товари для порівняння", "error");("Максимум 4 товари");
+    if (compare.length >= 4) {
+        showToast("Максимум 4 товари для порівняння", "error");
         return;
     }
 
     compare.push(productId);
+    localStorage.setItem("compare", JSON.stringify(compare));
 
-    localStorage.setItem(
-        "compare",
-        JSON.stringify(compare)
-    );
+    showToast("Товар додано до порівняння");
+}
 
-showToast("Товар додано до порівняння");    }
+async function initCatalog() {
+    const response = await fetch(`${API_URL}/api/products`);
+    products = await response.json();
+
+    const urlParams = new URLSearchParams(window.location.search);
+
+    const urlSearch = urlParams.get("search") || "";
+    const urlCategory = urlParams.get("category") || "all";
+
+    searchInput.value = urlSearch;
+    categoryFilter.value = urlCategory;
+
+    filterProducts();
+}
+
+searchInput.addEventListener("input", filterProducts);
+categoryFilter.addEventListener("change", filterProducts);
+
+initCatalog();

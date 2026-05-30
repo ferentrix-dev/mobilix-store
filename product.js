@@ -1,20 +1,29 @@
+const API_URL = "https://mobilix-backend-production.up.railway.app";
+
 const productContainer = document.getElementById("productContainer");
 
 const params = new URLSearchParams(window.location.search);
-const productId = Number(params.get("id"));
+const productId = params.get("id");
 
-const product = products.find(item => item.id === productId);
+let product = null;
 
-let selectedVariant = product?.variants?.[0] || null;
+async function loadProduct() {
+    const response = await fetch(`${API_URL}/api/products`);
+    const products = await response.json();
 
-if (!product) {
-    productContainer.innerHTML = `
-        <div class="product-not-found">
-            <h1>Товар не знайдено</h1>
-            <a href="catalog.html">Повернутись до каталогу</a>
-        </div>
-    `;
-} else {
+    product = products.find(item => item._id === productId);
+
+    if (!product) {
+        productContainer.innerHTML = `
+            <div class="product-not-found">
+                <h1>Товар не знайдено</h1>
+                <p>Схоже, такого товару немає в каталозі.</p>
+                <a href="catalog.html">Повернутись до каталогу</a>
+            </div>
+        `;
+        return;
+    }
+
     renderProduct();
 }
 
@@ -25,11 +34,7 @@ function renderProduct() {
         <div class="product-detail">
 
             <div class="product-detail-image">
-                <img 
-                    id="productImage"
-                    src="${selectedVariant ? selectedVariant.image : product.image}" 
-                    alt="${product.title}"
-                >
+                <img src="${product.image}" alt="${product.title}">
             </div>
 
             <div class="product-detail-info">
@@ -41,34 +46,16 @@ function renderProduct() {
 
                 <strong>${product.price} ₴</strong>
 
-                ${
-                    product.variants
-                    ? `
-                    <div class="variant-box">
-                        <h4>Оберіть варіант:</h4>
+                <p class="product-stock">
+    В наявності: ${product.stock || 0} шт.
+</p>
 
-                        <div class="variant-list">
-                            ${product.variants.map((variant, index) => `
-                                <button 
-                                    class="variant-btn ${index === 0 ? "active" : ""}"
-                                    onclick="selectVariant(${index})"
-                                    ${!variant.inStock ? "disabled" : ""}
-                                >
-                                    ${variant.name}
-                                </button>
-                            `).join("")}
-                        </div>
-                    </div>
-                    `
-                    : ""
-                }
-
-                <button onclick="addToCart(${product.id})">
+                <button onclick="addToCart('${product._id}')">
                     Додати у кошик
                 </button>
 
                 <button 
-                    onclick="toggleFavorite(${product.id})"
+                    onclick="toggleFavorite('${product._id}')"
                     class="product-favorite-btn"
                 >
                     <i class="fa-regular fa-heart"></i>
@@ -80,33 +67,16 @@ function renderProduct() {
     `;
 }
 
-function selectVariant(index) {
-    selectedVariant = product.variants[index];
-
-    document.getElementById("productImage").src = selectedVariant.image;
-
-    document.querySelectorAll(".variant-btn").forEach(btn => {
-        btn.classList.remove("active");
-    });
-
-    document.querySelectorAll(".variant-btn")[index].classList.add("active");
-}
-
 function addToCart(productId) {
     const cart = JSON.parse(localStorage.getItem("cart")) || [];
 
-    const variantName = selectedVariant ? selectedVariant.name : "Стандартний";
-
-    const existingProduct = cart.find(item => 
-        item.id === productId && item.variant === variantName
-    );
+    const existingProduct = cart.find(item => item.id === productId);
 
     if (existingProduct) {
         existingProduct.quantity += 1;
     } else {
         cart.push({
             id: productId,
-            variant: variantName,
             quantity: 1
         });
     }
@@ -137,3 +107,5 @@ function toggleFavorite(productId) {
 
     saveFavorites(favorites);
 }
+
+loadProduct();

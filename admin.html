@@ -192,6 +192,8 @@ button{
 
 <input type="number" id="price" placeholder="Ціна">
 
+<input type="number" id="stock" placeholder="Кількість в наявності">
+
 <input type="file" id="imageFile" accept="image/*">
 
 <textarea id="description" placeholder="Опис"></textarea>
@@ -253,6 +255,7 @@ async function loadProducts(){
                 <p>${product.category}</p>
 
                 <p>${product.price} ₴</p>
+<p>В наявності: ${product.stock || 0} шт.</p>
 
             </div>
 
@@ -272,11 +275,27 @@ async function loadProducts(){
 }
 
 async function addProduct(){
-    const title = document.getElementById("title").value;
+    const title = document.getElementById("title").value.trim();
     const category = document.getElementById("category").value;
-    const price = document.getElementById("price").value;
+    const price = Number(document.getElementById("price").value);
+    const stock = Number(document.getElementById("stock").value);
     const imageFile = document.getElementById("imageFile").files[0];
-    const description = document.getElementById("description").value;
+    const description = document.getElementById("description").value.trim();
+
+    if(!title){
+        alert("Вкажи назву товару");
+        return;
+    }
+
+    if(!price || price <= 0){
+        alert("Вкажи нормальну ціну");
+        return;
+    }
+
+    if(!stock || stock <= 0){
+        alert("Вкажи кількість товару");
+        return;
+    }
 
     if(!imageFile){
         alert("Оберіть фото товару");
@@ -288,34 +307,78 @@ async function addProduct(){
 
     const uploadResponse = await fetch(`${API_URL}/api/upload`, {
         method: "POST",
+        headers: {
+            "Authorization": "Bearer " + token
+        },
         body: formData
     });
 
     const uploadData = await uploadResponse.json();
 
+    if(!uploadResponse.ok || !uploadData.success){
+        alert("Помилка завантаження фото");
+        return;
+    }
+
+    const productData = {
+        title: title,
+        category: category,
+        price: price,
+        stock: stock,
+        image: uploadData.imageUrl,
+        description: description,
+        variants: []
+    };
+
+    console.log("PRODUCT DATA:", productData);
+
     const response = await fetch(`${API_URL}/api/products`, {
-        method:"POST",
-        headers:{
-            "Content-Type":"application/json"
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": "Bearer " + token
         },
-        body:JSON.stringify({
-            title,
-            category,
-            price,
-            image: uploadData.imageUrl,
-            description,
-            variants:[]
-        })
+        body: JSON.stringify(productData)
+    });
+
+    const data = await response.json();
+
+    console.log("CREATE RESPONSE:", data);
+
+    if(response.ok && data.success){
+        loadProducts();
+
+        document.getElementById("title").value = "";
+        document.getElementById("price").value = "";
+        document.getElementById("stock").value = "";
+        document.getElementById("imageFile").value = "";
+        document.getElementById("description").value = "";
+
+        alert("Товар додано");
+    }else{
+        alert("Помилка створення товару");
+    }
+}
+
+async function deleteProduct(id){
+
+    const confirmDelete = confirm("Видалити товар?");
+
+    if(!confirmDelete){
+        return;
+    }
+
+    const response = await fetch(`${API_URL}/api/products/${id}`, {
+        method: "DELETE",
+        headers: {
+            "Authorization": "Bearer " + token
+        }
     });
 
     if(response.ok){
         loadProducts();
-
-        document.getElementById("title").value = "";
-        document.getElementById("category").value = "";
-        document.getElementById("price").value = "";
-        document.getElementById("imageFile").value = "";
-        document.getElementById("description").value = "";
+    }else{
+        alert("Помилка видалення товару");
     }
 }
 

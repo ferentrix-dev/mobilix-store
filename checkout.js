@@ -5,7 +5,13 @@ const citiesList = document.getElementById("citiesList");
 const warehouseSelect = document.getElementById("warehouseSelect");
 const checkoutForm = document.getElementById("checkoutForm");
 
+let products = [];
 let selectedCity = null;
+
+async function loadProducts() {
+    const response = await fetch(`${API_URL}/api/products`);
+    products = await response.json();
+}
 
 cityInput.addEventListener("input", async () => {
     const search = cityInput.value.trim();
@@ -66,12 +72,18 @@ checkoutForm.addEventListener("submit", async (event) => {
     }
 
     const items = cart.map(item => {
-        const product = products.find(p => p.id === item.id);
-        return `${product.title} (${item.variant || "Стандартний"}) x${item.quantity}`;
+        const product = products.find(p => p._id === item.id);
+
+        if (!product) return "";
+
+        return `${product.title} x${item.quantity}`;
     }).join("\n");
 
     const total = cart.reduce((sum, item) => {
-        const product = products.find(p => p.id === item.id);
+        const product = products.find(p => p._id === item.id);
+
+        if (!product) return sum;
+
         return sum + product.price * item.quantity;
     }, 0);
 
@@ -106,3 +118,5 @@ checkoutForm.addEventListener("submit", async (event) => {
         showToast("Помилка оформлення замовлення", "error");
     }
 });
+
+loadProducts();

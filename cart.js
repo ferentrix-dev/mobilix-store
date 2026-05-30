@@ -1,4 +1,8 @@
+const API_URL = "https://mobilix-backend-production.up.railway.app";
+
 const cartContainer = document.getElementById("cartContainer");
+
+let products = [];
 
 function getCart() {
     return JSON.parse(localStorage.getItem("cart")) || [];
@@ -6,6 +10,13 @@ function getCart() {
 
 function saveCart(cart) {
     localStorage.setItem("cart", JSON.stringify(cart));
+}
+
+async function loadProducts() {
+    const response = await fetch(`${API_URL}/api/products`);
+    products = await response.json();
+
+    renderCart();
 }
 
 function renderCart() {
@@ -27,7 +38,7 @@ function renderCart() {
     cartContainer.innerHTML = `
         <div class="cart-list">
             ${cart.map(item => {
-                const product = products.find(p => p.id === item.id);
+                const product = products.find(p => p._id === item.id);
                 if (!product) return "";
 
                 const itemTotal = product.price * item.quantity;
@@ -39,22 +50,21 @@ function renderCart() {
 
                         <div class="cart-item-info">
                             <h3>${product.title}</h3>
-                            <p>Варіант: ${item.variant || "Стандартний"}</p>
                             <p>${product.category}</p>
                             <strong>${product.price} ₴</strong>
                         </div>
 
                         <div class="cart-quantity">
-                            <button onclick="changeQuantity(${product.id}, -1)">−</button>
+                            <button onclick="changeQuantity('${product._id}', -1)">−</button>
                             <span>${item.quantity}</span>
-                            <button onclick="changeQuantity(${product.id}, 1)">+</button>
+                            <button onclick="changeQuantity('${product._id}', 1)">+</button>
                         </div>
 
                         <div class="cart-item-total">
                             ${itemTotal} ₴
                         </div>
 
-                        <button class="remove-btn" onclick="removeFromCart(${product.id})">
+                        <button class="remove-btn" onclick="removeFromCart('${product._id}')">
                             Видалити
                         </button>
                     </div>
@@ -64,9 +74,10 @@ function renderCart() {
 
         <div class="cart-summary">
             <h2>Разом: ${total} ₴</h2>
+
             <a href="checkout.html" class="checkout-btn">
-    Оформити замовлення
-</a>
+                Оформити замовлення
+            </a>
         </div>
     `;
 }
@@ -80,8 +91,7 @@ function changeQuantity(productId, amount) {
     item.quantity += amount;
 
     if (item.quantity <= 0) {
-        const updatedCart = cart.filter(i => i.id !== productId);
-        saveCart(updatedCart);
+        saveCart(cart.filter(i => i.id !== productId));
     } else {
         saveCart(cart);
     }
@@ -90,9 +100,8 @@ function changeQuantity(productId, amount) {
 }
 
 function removeFromCart(productId) {
-    const cart = getCart().filter(i => i.id !== productId);
-    saveCart(cart);
+    saveCart(getCart().filter(i => i.id !== productId));
     renderCart();
 }
 
-renderCart();
+loadProducts();

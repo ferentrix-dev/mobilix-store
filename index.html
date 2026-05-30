@@ -291,105 +291,97 @@
     </div>
 
 </section>
-<script src="products.js"></script>
 <script src="toast.js"></script>    
 <script>
-    const burgerBtn = document.querySelector('.burger-btn');
-    const topbarMenu = document.querySelector('.topbar-menu');
+    const API_URL = "https://mobilix-backend-production.up.railway.app";
 
-    burgerBtn.onclick = function(){
-        topbarMenu.classList.toggle('active');
-    };
+    const burgerBtn = document.querySelector(".burger-btn");
+    const topbarMenu = document.querySelector(".topbar-menu");
 
-    const searchInput = document.getElementById('headerSearchInput');
-    const searchBtn = document.getElementById('headerSearchBtn');
-    const categorySelect = document.getElementById('headerCategorySelect');
+    if (burgerBtn && topbarMenu) {
+        burgerBtn.onclick = function () {
+            topbarMenu.classList.toggle("active");
+        };
+    }
 
-    searchBtn.onclick = function(){
-        const search = searchInput.value.trim();
-        const category = categorySelect.value;
+    const searchInput = document.getElementById("headerSearchInput");
+    const searchBtn = document.getElementById("headerSearchBtn");
+    const categorySelect = document.getElementById("headerCategorySelect");
 
-        window.location.href =
-            'catalog.html?search=' +
-            encodeURIComponent(search) +
-            '&category=' +
-            encodeURIComponent(category);
-    };
+    if (searchBtn && searchInput && categorySelect) {
+        searchBtn.onclick = function () {
+            const search = searchInput.value.trim();
+            const category = categorySelect.value;
 
-    searchInput.onkeydown = function(event){
-        if(event.key === 'Enter'){
-            searchBtn.click();
+            window.location.href =
+                "catalog.html?search=" +
+                encodeURIComponent(search) +
+                "&category=" +
+                encodeURIComponent(category);
+        };
+
+        searchInput.onkeydown = function (event) {
+            if (event.key === "Enter") {
+                searchBtn.click();
+            }
+        };
+    }
+
+    async function updateCartInfo() {
+        const cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+        let total = 0;
+        let count = 0;
+
+        try {
+            const response = await fetch(`${API_URL}/api/products`);
+            const products = await response.json();
+
+            cart.forEach(item => {
+                const product = products.find(p => p._id === item.id);
+
+                if (product) {
+                    total += product.price * item.quantity;
+                    count += item.quantity;
+                }
+            });
+        } catch (error) {
+            console.log("Cart info error:", error);
         }
-    };
 
-    function updateCartInfo(){
-    const cart = JSON.parse(localStorage.getItem("cart")) || [];
+        const cartCount = document.getElementById("cartCount");
+        const cartTotal = document.getElementById("cartTotal");
 
-    let total = 0;
-    let count = 0;
-
-    cart.forEach(item => {
-        const product = products.find(p => p.id === item.id);
-
-        if(product){
-            total += product.price * item.quantity;
-            count += item.quantity;
+        if (cartCount) {
+            cartCount.textContent = count;
         }
-    });
 
-    const cartCount = document.getElementById("cartCount");
-    const cartTotal = document.getElementById("cartTotal");
-
-    if(cartCount){
-        cartCount.textContent = count;
+        if (cartTotal) {
+            cartTotal.textContent = total;
+        }
     }
 
-    if(cartTotal){
-        cartTotal.textContent = total;
+    function updateFavoritesCount() {
+        const favorites = JSON.parse(localStorage.getItem("favorites")) || [];
+        const counter = document.getElementById("favoritesCount");
+
+        if (counter) {
+            counter.textContent = favorites.length;
+        }
     }
-}
 
-updateCartInfo();
+    function updateCompareCount() {
+        const compare = JSON.parse(localStorage.getItem("compare")) || [];
+        const counter = document.getElementById("compareCount");
 
-function updateFavoritesCount(){
-
-    const favorites =
-    JSON.parse(
-    localStorage.getItem("favorites")
-    ) || [];
-
-    const counter =
-    document.getElementById(
-    "favoritesCount"
-    );
-
-    if(counter){
-        counter.textContent =
-        favorites.length;
+        if (counter) {
+            counter.textContent = compare.length;
+        }
     }
-}
 
-updateFavoritesCount();
-
-function updateCompareCount(){
-
-    const compare =
-    JSON.parse(
-    localStorage.getItem("compare")
-    ) || [];
-
-    const counter =
-    document.getElementById(
-    "compareCount"
-    );
-
-    if(counter){
-        counter.textContent =
-        compare.length;
-    }
-}
-
-updateCompareCount();
+    updateCartInfo();
+    updateFavoritesCount();
+    updateCompareCount();
 </script>
 </body>
 </html>

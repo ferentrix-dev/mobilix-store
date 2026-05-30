@@ -1,4 +1,8 @@
+const API_URL = "https://mobilix-backend-production.up.railway.app";
+
 const favoritesGrid = document.getElementById("favoritesGrid");
+
+let products = [];
 
 function getFavorites() {
     return JSON.parse(localStorage.getItem("favorites")) || [];
@@ -14,9 +18,19 @@ function removeFavorite(productId) {
     renderFavorites();
 }
 
+async function loadProducts() {
+    const response = await fetch(`${API_URL}/api/products`);
+    products = await response.json();
+
+    renderFavorites();
+}
+
 function renderFavorites() {
     const favorites = getFavorites();
-    const favoriteProducts = products.filter(product => favorites.includes(product.id));
+
+    const favoriteProducts = products.filter(product =>
+        favorites.includes(product._id)
+    );
 
     if (favoriteProducts.length === 0) {
         favoritesGrid.innerHTML = `
@@ -37,13 +51,13 @@ function renderFavorites() {
 
                 <button 
                     class="favorite-btn active"
-                    onclick="removeFavorite(${product.id})"
+                    onclick="removeFavorite('${product._id}')"
                     type="button"
                 >
                     <i class="fa-solid fa-heart"></i>
                 </button>
 
-                <a href="product.html?id=${product.id}" class="favorite-product-link">
+                <a href="product.html?id=${product._id}" class="favorite-product-link">
                     <img src="${product.image}" alt="${product.title}">
 
                     <span class="product-category-label">${product.category}</span>
@@ -64,4 +78,4 @@ function renderFavorites() {
     });
 }
 
-renderFavorites();
+loadProducts();
