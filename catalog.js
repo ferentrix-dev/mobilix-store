@@ -72,7 +72,21 @@ function renderProducts(items) {
 
                 <p>${product.description}</p>
 
-                <strong>${product.price} ₴</strong>
+${
+    product.variants && product.variants.filter(v => v.stock > 0).length > 0
+    ? `
+        <div class="product-variants-preview">
+            ${product.variants
+                .filter(variant => variant.stock > 0)
+                .map(variant => `
+                    <span>${variant.name} · ${variant.stock} шт.</span>
+                `).join("")}
+        </div>
+    `
+    : ""
+}
+
+<strong>${product.price} ₴</strong>
 
                 <div class="product-card-btn">
                     Переглянути товар

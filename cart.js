@@ -39,32 +39,40 @@ function renderCart() {
         <div class="cart-list">
             ${cart.map(item => {
                 const product = products.find(p => p._id === item.id);
+
                 if (!product) return "";
 
                 const itemTotal = product.price * item.quantity;
                 total += itemTotal;
 
+                const variantText = item.variant || "Стандартний";
+
                 return `
                     <div class="cart-item">
-                        <img src="${product.image}" alt="${product.title}">
+                        <img src="${getCartItemImage(product, item)}" alt="${product.title}">
 
                         <div class="cart-item-info">
                             <h3>${product.title}</h3>
                             <p>${product.category}</p>
+
+                            <p class="cart-variant">
+                                Тип: ${variantText}
+                            </p>
+
                             <strong>${product.price} ₴</strong>
                         </div>
 
                         <div class="cart-quantity">
-                            <button onclick="changeQuantity('${product._id}', -1)">−</button>
+                            <button onclick="changeQuantity('${product._id}', '${variantText}', -1)">−</button>
                             <span>${item.quantity}</span>
-                            <button onclick="changeQuantity('${product._id}', 1)">+</button>
+                            <button onclick="changeQuantity('${product._id}', '${variantText}', 1)">+</button>
                         </div>
 
                         <div class="cart-item-total">
                             ${itemTotal} ₴
                         </div>
 
-                        <button class="remove-btn" onclick="removeFromCart('${product._id}')">
+                        <button class="remove-btn" onclick="removeFromCart('${product._id}', '${variantText}')">
                             Видалити
                         </button>
                     </div>
@@ -82,16 +90,31 @@ function renderCart() {
     `;
 }
 
-function changeQuantity(productId, amount) {
+function getCartItemImage(product, item) {
+    if (!item.variant || item.variant === "Стандартний") {
+        return product.image;
+    }
+
+    const variant = product.variants?.find(v => v.name === item.variant);
+
+    return variant?.image || product.image;
+}
+
+function changeQuantity(productId, variantName, amount) {
     const cart = getCart();
-    const item = cart.find(i => i.id === productId);
+
+    const item = cart.find(i =>
+        i.id === productId && (i.variant || "Стандартний") === variantName
+    );
 
     if (!item) return;
 
     item.quantity += amount;
 
     if (item.quantity <= 0) {
-        saveCart(cart.filter(i => i.id !== productId));
+        saveCart(cart.filter(i =>
+            !(i.id === productId && (i.variant || "Стандартний") === variantName)
+        ));
     } else {
         saveCart(cart);
     }
@@ -99,8 +122,12 @@ function changeQuantity(productId, amount) {
     renderCart();
 }
 
-function removeFromCart(productId) {
-    saveCart(getCart().filter(i => i.id !== productId));
+function removeFromCart(productId, variantName) {
+    const cart = getCart().filter(i =>
+        !(i.id === productId && (i.variant || "Стандартний") === variantName)
+    );
+
+    saveCart(cart);
     renderCart();
 }
 

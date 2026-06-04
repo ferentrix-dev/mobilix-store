@@ -72,12 +72,14 @@ checkoutForm.addEventListener("submit", async (event) => {
     }
 
     const items = cart.map(item => {
-        const product = products.find(p => p._id === item.id);
+    const product = products.find(p => p._id === item.id);
 
-        if (!product) return "";
+    if (!product) return "";
 
-        return `${product.title} x${item.quantity}`;
-    }).join("\n");
+    const variant = item.variant || "Стандартний";
+
+    return `${product.title} (${variant}) x${item.quantity}`;
+}).join("\n");
 
     const total = cart.reduce((sum, item) => {
         const product = products.find(p => p._id === item.id);
@@ -88,16 +90,17 @@ checkoutForm.addEventListener("submit", async (event) => {
     }, 0);
 
     const order = {
-        surname: document.getElementById("customerSurname").value.trim(),
-        name: document.getElementById("customerName").value.trim(),
-        middleName: document.getElementById("customerMiddleName").value.trim(),
-        phone: document.getElementById("customerPhone").value.trim(),
-        city: cityInput.value.trim(),
-        warehouse: warehouseSelect.value,
-        comment: document.getElementById("customerComment").value.trim(),
-        items,
-        total
-    };
+    surname: document.getElementById("customerSurname").value.trim(),
+    name: document.getElementById("customerName").value.trim(),
+    middleName: document.getElementById("customerMiddleName").value.trim(),
+    phone: document.getElementById("customerPhone").value.trim(),
+    city: cityInput.value.trim(),
+    warehouse: warehouseSelect.value,
+    comment: document.getElementById("customerComment").value.trim(),
+    items,
+    total,
+    cart
+};
 
     const response = await fetch(`${API_URL}/api/order`, {
         method: "POST",
