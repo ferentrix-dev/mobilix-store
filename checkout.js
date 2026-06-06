@@ -61,22 +61,6 @@ async function loadWarehouses(cityRef) {
     });
 }
 
-function redirectToLiqPay(data, signature) {
-    const form = document.createElement("form");
-
-    form.method = "POST";
-    form.action = "https://www.liqpay.ua/api/3/checkout";
-    form.acceptCharset = "utf-8";
-
-    form.innerHTML = `
-        <input type="hidden" name="data" value="${data}">
-        <input type="hidden" name="signature" value="${signature}">
-    `;
-
-    document.body.appendChild(form);
-    form.submit();
-}
-
 checkoutForm.addEventListener("submit", async (event) => {
     event.preventDefault();
 
@@ -105,8 +89,6 @@ checkoutForm.addEventListener("submit", async (event) => {
         return sum + product.price * item.quantity;
     }, 0);
 
-    const paymentMethod = document.getElementById("paymentMethod").value;
-
     const order = {
         surname: document.getElementById("customerSurname").value.trim(),
         name: document.getElementById("customerName").value.trim(),
@@ -115,37 +97,10 @@ checkoutForm.addEventListener("submit", async (event) => {
         city: cityInput.value.trim(),
         warehouse: warehouseSelect.value,
         comment: document.getElementById("customerComment").value.trim(),
-        paymentMethod,
         items,
         total,
         cart
     };
-
-    if (paymentMethod === "online") {
-        const orderId = "mobilix-" + Date.now();
-
-        const paymentResponse = await fetch(`${API_URL}/api/create-payment`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-                amount: total,
-                orderId,
-                order
-            })
-        });
-
-        const paymentData = await paymentResponse.json();
-
-        if (!paymentData.success) {
-            showToast("Помилка створення оплати", "error");
-            return;
-        }
-
-        redirectToLiqPay(paymentData.data, paymentData.signature);
-        return;
-    }
 
     const response = await fetch(`${API_URL}/api/order`, {
         method: "POST",
