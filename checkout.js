@@ -88,11 +88,19 @@ checkoutForm.addEventListener("submit", async (event) => {
         return sum + product.price * item.quantity;
     }, 0);
 
+    const phone = document.getElementById("customerPhone").value.trim();
+
+if (!/^(\+380|380|0)\d{9}$/.test(phone)) {
+    showToast("Введіть коректний номер телефону", "error");
+    return;
+}
+
     const order = {
         surname: document.getElementById("customerSurname").value.trim(),
         name: document.getElementById("customerName").value.trim(),
         middleName: document.getElementById("customerMiddleName").value.trim(),
-        phone: document.getElementById("customerPhone").value.trim(),
+        phone,
+paymentMethod: document.getElementById("paymentMethod").value,
         city: cityInput.value.trim(),
         warehouse: warehouseSelect.value,
         comment: document.getElementById("customerComment").value.trim(),
