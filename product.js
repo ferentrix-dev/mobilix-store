@@ -1,5 +1,4 @@
-const API_URL = "https://mobilix-backend-production.up.railway.app";
-
+const API_URL = "https://site--mobilix-backend--98z6fhqjkxml.code.run";
 const productContainer = document.getElementById("productContainer");
 
 const params = new URLSearchParams(window.location.search);

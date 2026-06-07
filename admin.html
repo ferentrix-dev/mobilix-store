@@ -400,15 +400,15 @@ button:hover{
 </div>
 
 <script>
-const API_URL = "https://mobilix-backend-production.up.railway.app";
+const API_URL = "https://site--mobilix-backend--98z6fhqjkxml.code.run";
 
-const token = localStorage.getItem("adminToken");
+const token = sessionStorage.getItem("adminToken");
 
 let editingProductId = null;
 let editingProductImage = null;
 
-if(!token){
-    window.location.href = "admin-login.html";
+if (!token) {
+    window.location.replace("admin-login.html");
 }
 
 async function uploadImage(file){
@@ -719,11 +719,13 @@ async function deleteProduct(id){
 }
 
 function logout(){
-    localStorage.removeItem("adminToken");
+    sessionStorage.removeItem("adminToken");
     window.location.href = "admin-login.html";
 }
 
-loadProducts();
+if (token) {
+    loadProducts();
+}
 </script>
 
 </body>

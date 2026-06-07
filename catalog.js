@@ -1,5 +1,4 @@
-const API_URL = "https://mobilix-backend-production.up.railway.app";
-
+const API_URL = "https://site--mobilix-backend--98z6fhqjkxml.code.run";
 let products = [];
 
 const productsGrid = document.getElementById("productsGrid");
