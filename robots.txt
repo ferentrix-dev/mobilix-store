@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://ferentrix-dev.github.io/mobilix-store/sitemap.xml

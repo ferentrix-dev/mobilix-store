@@ -3,81 +3,41 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mobilix</title>
-
+    <title>Mobilix — Аксесуари для смартфонів та iPhone</title>
+    <meta name="description" content="Чохли, кабелі, зарядні пристрої та аксесуари для смартфонів з доставкою по Україні.">
+    <link rel="icon" type="image/png" href="Images/favicon.png">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Mobilix — Аксесуари для смартфонів та iPhone">
+    <meta property="og:description" content="Чохли, кабелі, зарядні пристрої та аксесуари для смартфонів з доставкою по Україні.">
+    <meta property="og:image" content="https://ferentrix-dev.github.io/mobilix-store/Images/favicon.png">
     <link rel="stylesheet" href="styles.css">
-    <link rel="icon" type="Images/Mobilix Logo.png" href="favicon.png">
-    <meta
-name="description"
-content="Чохли, кабелі та аксесуари для iPhone з доставкою Новою Поштою по Україні.">
-
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 </head>
-
 <body>
-
 <header class="topbar">
-
-    <div class="topbar-mobile">
-        <button class="burger-btn">
-            <i class="fa-solid fa-bars"></i>
-        </button>
-    </div>
-
+    <div class="topbar-mobile"><button class="burger-btn" aria-label="Меню"><i class="fa-solid fa-bars"></i></button></div>
     <div class="topbar-menu">
         <ul class="left-menu">
-            <li>
-    <a href="about.html">Про нас</a>
-</li>
-
-<li>
-    <a href="delivery.html">Доставка і оплата</a>
-</li>
-
-<li>
-    <a href="warranty.html">Гарантія</a>
-</li>
-
-<li>
-    <a href="contacts.html">Контакти</a>
-</li>
+            <li><a href="about.html">Про нас</a></li>
+            <li><a href="delivery.html">Доставка і оплата</a></li>
+            <li><a href="warranty.html">Гарантія</a></li>
+            <li><a href="contacts.html">Контакти</a></li>
         </ul>
-
         <ul class="right-menu">
-            <a href="https://maps.google.com/?q=Хмельницький" target="_blank"><li><i class="fa-solid fa-location-dot"></i> Хмельницький</li></a>
-            <li>
-    <a href="favorites.html">
-        <i class="fa-regular fa-heart"></i>
-        Вибране
-        <span id="favoritesCount" class="header-counter">0</span>
-    </a>
-</li>
+            <li><a href="https://maps.google.com/?q=Хмельницький" target="_blank" rel="noopener"><i class="fa-solid fa-location-dot"></i> Хмельницький</a></li>
+            <li><a href="favorites.html"><i class="fa-regular fa-heart"></i> Вибране <span id="favoritesCount" class="header-counter">0</span></a></li>
         </ul>
     </div>
-
 </header>
-
 <header class="middle-header">
     <a href="index.html" class="logo">Mobi<span>lix</span></a>
-
-    <a href="catalog.html" class="catalog-btn">
-    <i class="fa-solid fa-bars"></i>
-    Каталог товарів
-</a>
-
-  <div class="search-box">
-
-    <input 
-        type="text" 
-        id="headerSearchInput"
-        placeholder="Пошук товарів..."
-    >
+    <a href="catalog.html" class="catalog-btn"><i class="fa-solid fa-bars"></i> Каталог товарів</a>
+    <div class="search-box">
+        <input type="text" id="headerSearchInput" placeholder="Пошук товарів...">
         <select id="headerCategorySelect" class="header-category-select">
             <option value="all">Усі категорії</option>
-
-<option value="Чохли">Чохли</option>
+            <option value="Чохли">Чохли</option>
 <option value="Зарядні пристрої">Зарядні пристрої</option>
 <option value="Кабелі">Кабелі</option>
 <option value="Навушники">Навушники</option>
@@ -88,311 +48,113 @@ content="Чохли, кабелі та аксесуари для iPhone з до�
 <option value="Портативні колонки">Портативні колонки</option>
 <option value="Аксесуари">Аксесуари</option>
 <option value="Карти пам'яті">Карти пам'яті</option>
-    </select>
-
-    <button class="search-btn" id="headerSearchBtn">
-        <i class="fa-solid fa-magnifying-glass"></i>
-    </button>
-
-</div>
-
-    <div class="header-right">
-        <a href="compare.html" class="compare">
-    <i class="fa-solid fa-scale-balanced"></i>
-
-    <span>
-        Порівняння
-        <span id="compareCount" class="header-counter">
-            0
-        </span>
-    </span>
-</a>
-
-       <a href="cart.html" class="cart">
-    <i class="fa-solid fa-cart-shopping"></i>
-
-    <div class="cart-info">
-        <span>Кошик</span>
-        <p><span id="cartCount">0</span> товарів · <span id="cartTotal">0</span> ₴</p>  
+        </select>
+        <button class="search-btn" id="headerSearchBtn" aria-label="Пошук"><i class="fa-solid fa-magnifying-glass"></i></button>
     </div>
-</a>
+    <div class="header-right">
+        <a href="compare.html" class="compare"><i class="fa-solid fa-scale-balanced"></i><span>Порівняння <span id="compareCount" class="header-counter">0</span></span></a>
+        <a href="cart.html" class="cart"><i class="fa-solid fa-cart-shopping"></i><div class="cart-info"><span>Кошик</span><p><span id="cartCount">0</span> товарів · <span id="cartTotal">0</span> ₴</p></div></a>
+    </div>
 </header>
-
 <section class="hero-section">
-
-    <aside class="category-sidebar">
-        <a href="catalog.html?category=Чохли" class="category-item">
-    <i class="fa-solid fa-mobile-screen"></i>
-    <span>Чохли</span>
-</a>
-
-<a href="catalog.html?category=Зарядні пристрої" class="category-item">
-    <i class="fa-solid fa-bolt"></i>
-    <span>Зарядні пристрої</span>
-</a>
-
-<a href="catalog.html?category=Кабелі" class="category-item">
-    <i class="fa-solid fa-plug"></i>
-    <span>Кабелі</span>
-</a>
-
-<a href="catalog.html?category=Навушники" class="category-item">
-    <i class="fa-solid fa-headphones"></i>
-    <span>Навушники</span>
-</a>
-
-<a href="catalog.html?category=Повербанки" class="category-item">
-    <i class="fa-solid fa-battery-full"></i>
-    <span>Повербанки</span>
-</a>
-
-<a href="catalog.html?category=Тримачі" class="category-item">
-    <i class="fa-solid fa-car"></i>
-    <span>Тримачі</span>
-</a>
-
-<a href="catalog.html?category=Захисне скло" class="category-item">
-    <i class="fa-solid fa-shield"></i>
-    <span>Захисне скло</span>
-</a>
-
-<a href="catalog.html?category=Смарт-годинники" class="category-item">
-    <i class="fa-solid fa-clock"></i>
-    <span>Смарт-годинники</span>
-</a>
-
-<a href="catalog.html?category=Портативні колонки" class="category-item">
-    <i class="fa-solid fa-volume-high"></i>
-    <span>Портативні колонки</span>
-</a>
-
-<a href="catalog.html?category=Аксесуари" class="category-item">
-    <i class="fa-solid fa-keyboard"></i>
-    <span>Аксесуари</span>
-</a>
-
-<a href="catalog.html?category=Карти пам'яті" class="category-item">
-    <i class="fa-solid fa-memory"></i>
-    <span>Карти пам'яті</span>
-</a>
-
-<a href="catalog.html" class="category-item">
-    <i class="fa-solid fa-ellipsis"></i>
-    <span>Усі товари</span>
-</a>
-    </aside>
-
+    <aside class="category-sidebar"><a href="catalog.html?category=Чохли" class="category-item"><i class="fa-solid fa-mobile-screen"></i><span>Чохли</span></a>
+<a href="catalog.html?category=Зарядні пристрої" class="category-item"><i class="fa-solid fa-bolt"></i><span>Зарядні пристрої</span></a>
+<a href="catalog.html?category=Кабелі" class="category-item"><i class="fa-solid fa-plug"></i><span>Кабелі</span></a>
+<a href="catalog.html?category=Навушники" class="category-item"><i class="fa-solid fa-headphones"></i><span>Навушники</span></a>
+<a href="catalog.html?category=Повербанки" class="category-item"><i class="fa-solid fa-battery-full"></i><span>Повербанки</span></a>
+<a href="catalog.html?category=Тримачі" class="category-item"><i class="fa-solid fa-car"></i><span>Тримачі</span></a>
+<a href="catalog.html?category=Захисне скло" class="category-item"><i class="fa-solid fa-shield"></i><span>Захисне скло</span></a>
+<a href="catalog.html?category=Смарт-годинники" class="category-item"><i class="fa-solid fa-clock"></i><span>Смарт-годинники</span></a>
+<a href="catalog.html?category=Портативні колонки" class="category-item"><i class="fa-solid fa-volume-high"></i><span>Портативні колонки</span></a>
+<a href="catalog.html?category=Аксесуари" class="category-item"><i class="fa-solid fa-keyboard"></i><span>Аксесуари</span></a>
+<a href="catalog.html?category=Карти пам'яті" class="category-item"><i class="fa-solid fa-memory"></i><span>Карти пам'яті</span></a>
+<a href="catalog.html" class="category-item"><i class="fa-solid fa-ellipsis"></i><span>Усі товари</span></a></aside>
     <div class="hero-right">
-
         <div class="hero-banner">
             <div class="hero-content">
-                <h1>
-        Нові чохли <br>
-        для вашого смартфона
-    </h1>
-
-    <p>
-        Стильний дизайн, надійний захист та моделі
-        для популярних смартфонів
-    </p>
-
-    <a href="catalog.html?category=Чохли">
-        <button>
-            Переглянути товари
-        </button>
-    </a>
+                <h1>Нові аксесуари<br>для вашого смартфона</h1>
+                <p>Чохли, кабелі, зарядні пристрої та корисні товари для щоденного використання.</p>
+                <a href="catalog.html"><button>Переглянути товари</button></a>
             </div>
-
-            <img src="" alt="">
         </div>
-
         <div class="features-row">
-            <div class="feature-box">
-                <i class="fa-solid fa-truck-fast"></i>
-                <div>
-                    <h4>Швидка доставка</h4>
-                    <p>Доставимо за 1-2 дні</p>
-                </div>
-            </div>
-
-            <div class="feature-box">
-                <i class="fa-solid fa-shield-halved"></i>
-                <div>
-                    <h4>Гарантія якості</h4>
-                    <p>Офіційна гарантія</p>
-                </div>
-            </div>
-
-            <div class="feature-box">
-                <i class="fa-solid fa-rotate-left"></i>
-                <div>
-                    <h4>Легке повернення</h4>
-                    <p>Повернення протягом 14 днів</p>
-                </div>
-            </div>
-
-            <div class="feature-box">
-                <i class="fa-solid fa-headphones"></i>
-                <div>
-                    <h4>Підтримка 24/7</h4>
-                    <p>Ми завжди на зв'язку</p>
-                </div>
-            </div>
+            <div class="feature-box"><i class="fa-solid fa-truck-fast"></i><div><h4>Швидка доставка</h4><p>Нова Пошта по Україні</p></div></div>
+            <div class="feature-box"><i class="fa-solid fa-shield-halved"></i><div><h4>Гарантія якості</h4><p>Перевірка перед відправкою</p></div></div>
+            <div class="feature-box"><i class="fa-solid fa-rotate-left"></i><div><h4>Легке повернення</h4><p>Повернення протягом 14 днів</p></div></div>
+            <div class="feature-box"><i class="fa-solid fa-headphones"></i><div><h4>Швидка підтримка</h4><p>Відповідаємо щодня</p></div></div>
         </div>
-
     </div>
-
 </section>
-
+<div class="online-widget"><span class="online-dot"></span>Зараз на сайті: <strong id="onlineCount">0</strong></div>
 <section class="popular-categories">
-
-    <div class="section-header">
-
-        <h2>Популярні категорії</h2>
-
-        <a href="catalog.html">Переглянути всі</a>
-
-    </div>
-
-
+    <div class="section-header"><h2>Популярні категорії</h2><a href="catalog.html">Переглянути всі</a></div>
     <div class="categories-grid">
-
-        <a href="catalog.html?category=Зарядні пристрої" class="popular-card">
-    <img src="Images/Charger.png" alt="">
-    <span>Зарядні пристрої</span>
-</a>
-
-<a href="catalog.html?category=Чохли" class="popular-card">
-    <img src="Images/iPhone 16 Pro.png" alt="">
-    <span>Чохли</span>
-</a>
-
-<a href="catalog.html?category=Навушники" class="popular-card">
-    <img src="Images/Headphones.png" alt="">
-    <span>Навушники</span>
-</a>
-
-<a href="catalog.html?category=Повербанки" class="popular-card">
-    <img src="Images/Powerbank.jpg" alt="">
-    <span>Повербанки</span>
-</a>
-
-<a href="catalog.html?category=Кабелі" class="popular-card">
-    <img src="Images/Cable.jpg" alt="">
-    <span>Кабелі</span>
-</a>
-
-<a href="catalog.html?category=Тримачі" class="popular-card">
-    <img src="Images/Тримач.jpg" alt="">
-    <span>Тримачі</span>
-</a>
-
+        <a href="catalog.html?category=Зарядні пристрої" class="popular-card"><img src="Images/Charger.png" alt="Зарядні пристрої"><span>Зарядні пристрої</span></a>
+        <a href="catalog.html?category=Чохли" class="popular-card"><img src="Images/iPhone 16 Pro.png" alt="Чохли"><span>Чохли</span></a>
+        <a href="catalog.html?category=Навушники" class="popular-card"><img src="Images/Headphones.png" alt="Навушники"><span>Навушники</span></a>
+        <a href="catalog.html?category=Повербанки" class="popular-card"><img src="Images/Powerbank.jpg" alt="Повербанки"><span>Повербанки</span></a>
+        <a href="catalog.html?category=Кабелі" class="popular-card"><img src="Images/Cable.jpg" alt="Кабелі"><span>Кабелі</span></a>
+        <a href="catalog.html?category=Тримачі" class="popular-card"><img src="Images/Тримач.jpg" alt="Тримачі"><span>Тримачі</span></a>
     </div>
-
 </section>
-
 <footer class="site-footer">
     <div class="footer-logo">Mobi<span>lix</span></div>
-
     <div class="footer-links">
         <a href="about.html">Про нас</a>
         <a href="delivery.html">Доставка і оплата</a>
         <a href="warranty.html">Гарантія</a>
         <a href="contacts.html">Контакти</a>
     </div>
-
     <p>© 2026 Mobilix. Мобільні аксесуари з доставкою по Україні.</p>
 </footer>
-<script src="toast.js"></script>    
+<script src="toast.js"></script>
 <script>
 const API_URL = "https://site--mobilix-backend--98z6fhqjkxml.code.run";
-    const burgerBtn = document.querySelector(".burger-btn");
-    const topbarMenu = document.querySelector(".topbar-menu");
-
-    if (burgerBtn && topbarMenu) {
-        burgerBtn.onclick = function () {
-            topbarMenu.classList.toggle("active");
-        };
-    }
-
-    const searchInput = document.getElementById("headerSearchInput");
-    const searchBtn = document.getElementById("headerSearchBtn");
-    const categorySelect = document.getElementById("headerCategorySelect");
-
-    if (searchBtn && searchInput && categorySelect) {
-        searchBtn.onclick = function () {
-            const search = searchInput.value.trim();
-            const category = categorySelect.value;
-
-            window.location.href =
-                "catalog.html?search=" +
-                encodeURIComponent(search) +
-                "&category=" +
-                encodeURIComponent(category);
-        };
-
-        searchInput.onkeydown = function (event) {
-            if (event.key === "Enter") {
-                searchBtn.click();
-            }
-        };
-    }
-
-    async function updateCartInfo() {
-        const cart = JSON.parse(localStorage.getItem("cart")) || [];
-
-        let total = 0;
-        let count = 0;
-
-        try {
-            const response = await fetch(`${API_URL}/api/products`);
-            const products = await response.json();
-
-            cart.forEach(item => {
-                const product = products.find(p => p._id === item.id);
-
-                if (product) {
-                    total += product.price * item.quantity;
-                    count += item.quantity;
-                }
-            });
-        } catch (error) {
-            console.log("Cart info error:", error);
-        }
-
-        const cartCount = document.getElementById("cartCount");
-        const cartTotal = document.getElementById("cartTotal");
-
-        if (cartCount) {
-            cartCount.textContent = count;
-        }
-
-        if (cartTotal) {
-            cartTotal.textContent = total;
-        }
-    }
-
-    function updateFavoritesCount() {
-        const favorites = JSON.parse(localStorage.getItem("favorites")) || [];
-        const counter = document.getElementById("favoritesCount");
-
-        if (counter) {
-            counter.textContent = favorites.length;
-        }
-    }
-
-    function updateCompareCount() {
-        const compare = JSON.parse(localStorage.getItem("compare")) || [];
-        const counter = document.getElementById("compareCount");
-
-        if (counter) {
-            counter.textContent = compare.length;
-        }
-    }
-
-    updateCartInfo();
-    updateFavoritesCount();
-    updateCompareCount();
+const burgerBtn = document.querySelector('.burger-btn');
+const topbarMenu = document.querySelector('.topbar-menu');
+if (burgerBtn && topbarMenu) burgerBtn.onclick = () => topbarMenu.classList.toggle('active');
+const searchInput = document.getElementById('headerSearchInput');
+const searchBtn = document.getElementById('headerSearchBtn');
+const categorySelect = document.getElementById('headerCategorySelect');
+searchBtn.onclick = () => {
+    window.location.href = `catalog.html?search=${encodeURIComponent(searchInput.value.trim())}&category=${encodeURIComponent(categorySelect.value)}`;
+};
+searchInput.onkeydown = event => { if (event.key === 'Enter') searchBtn.click(); };
+async function fetchProducts() {
+    const response = await fetch(`${API_URL}/api/products`);
+    return response.json();
+}
+async function updateCartInfo() {
+    const cart = JSON.parse(localStorage.getItem('cart')) || [];
+    let total = 0, count = 0;
+    try {
+        const products = await fetchProducts();
+        cart.forEach(item => {
+            const product = products.find(p => p._id === item.id);
+            if (product) { total += product.price * item.quantity; count += item.quantity; }
+        });
+    } catch (error) {}
+    document.getElementById('cartCount').textContent = count;
+    document.getElementById('cartTotal').textContent = total;
+}
+async function updateSavedCounters() {
+    try {
+        const products = await fetchProducts();
+        const ids = products.map(p => p._id);
+        const favorites = (JSON.parse(localStorage.getItem('favorites')) || []).filter(id => ids.includes(id));
+        const compare = (JSON.parse(localStorage.getItem('compare')) || []).filter(id => ids.includes(id));
+        localStorage.setItem('favorites', JSON.stringify(favorites));
+        localStorage.setItem('compare', JSON.stringify(compare));
+        document.getElementById('favoritesCount').textContent = favorites.length;
+        document.getElementById('compareCount').textContent = compare.length;
+    } catch (error) {}
+}
+let onlineUserId = localStorage.getItem('onlineUserId') || crypto.randomUUID();
+localStorage.setItem('onlineUserId', onlineUserId);
+async function sendHeartbeat() { try { await fetch(`${API_URL}/api/online`, { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({userId:onlineUserId}) }); } catch(error) {} }
+async function updateOnlineCount() { try { const r = await fetch(`${API_URL}/api/online-count`); const d = await r.json(); document.getElementById('onlineCount').textContent = d.count; } catch(error) {} }
+updateCartInfo(); updateSavedCounters(); sendHeartbeat(); updateOnlineCount();
+setInterval(sendHeartbeat, 30000); setInterval(updateOnlineCount, 10000);
 </script>
 </body>
 </html>

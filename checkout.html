@@ -3,44 +3,45 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Оформлення замовлення — Mobilix</title>
-
+    <title>Оформлення замовлення | Mobilix</title>
+    <meta name="description" content="Оформлення замовлення в інтернет-магазині Mobilix. Швидка доставка Новою Поштою по Україні.">
+    <link rel="icon" type="image/png" href="Images/favicon.png">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Оформлення замовлення | Mobilix">
+    <meta property="og:description" content="Оформлення замовлення в інтернет-магазині Mobilix. Швидка доставка Новою Поштою по Україні.">
+    <meta property="og:image" content="https://ferentrix-dev.github.io/mobilix-store/Images/favicon.png">
     <link rel="stylesheet" href="styles.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 </head>
 <body>
-
 <section class="checkout-page">
     <a href="cart.html" class="back-link">← Назад до кошика</a>
-
-    <div class="page-hero">
-        <span>Mobilix</span>
-        <h1>Оформлення замовлення</h1>
-        <p>Заповніть дані для доставки Новою Поштою.</p>
-    </div>
-
+    <div class="page-hero"><span>Mobilix</span><h1>Оформлення замовлення</h1><p>Заповніть дані для доставки Новою Поштою.</p></div>
     <form class="checkout-form" id="checkoutForm">
-        <input type="text" id="customerSurname" placeholder="Прізвище" required>
-        <input type="text" id="customerName" placeholder="Ім’я" required>
+        <input type="text" id="customerSurname" autocomplete="family-name" placeholder="Прізвище" required>
+        <input type="text" id="customerName" autocomplete="given-name" placeholder="Ім’я" required>
         <input type="text" id="customerMiddleName" placeholder="По батькові" required>
-
-        <input type="tel" id="customerPhone" placeholder="Номер телефону" required>
-
+        <input type="tel" id="customerPhone" autocomplete="tel" placeholder="Номер телефону" required>
         <input type="text" id="cityInput" placeholder="Місто" autocomplete="off" required>
         <div class="suggestions-list" id="citiesList"></div>
-
-        <select id="warehouseSelect" required>
-            <option value="">Спочатку оберіть місто</option>
-        </select>
-
-        <textarea id="customerComment" placeholder="Коментар до замовлення"></textarea>>
-
+        <select id="warehouseSelect" required><option value="">Спочатку оберіть місто</option></select>
+        <select id="paymentMethod" required><option value="Післяплата">Післяплата</option></select>
+        <textarea id="customerComment" placeholder="Коментар до замовлення"></textarea>
         <button type="submit">Підтвердити замовлення</button>
     </form>
 </section>
-
+<footer class="site-footer">
+    <div class="footer-logo">Mobi<span>lix</span></div>
+    <div class="footer-links">
+        <a href="about.html">Про нас</a>
+        <a href="delivery.html">Доставка і оплата</a>
+        <a href="warranty.html">Гарантія</a>
+        <a href="contacts.html">Контакти</a>
+    </div>
+    <p>© 2026 Mobilix. Мобільні аксесуари з доставкою по Україні.</p>
+</footer>
 <script src="toast.js"></script>
 <script src="checkout.js"></script>
-
 </body>
 </html>

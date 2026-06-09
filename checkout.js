@@ -1,4 +1,5 @@
 const API_URL = "https://site--mobilix-backend--98z6fhqjkxml.code.run";
+
 const cityInput = document.getElementById("cityInput");
 const citiesList = document.getElementById("citiesList");
 const warehouseSelect = document.getElementById("warehouseSelect");
@@ -10,6 +11,37 @@ let selectedCity = null;
 async function loadProducts() {
     const response = await fetch(`${API_URL}/api/products`);
     products = await response.json();
+}
+
+function getProductStock(product, item) {
+    const variantName = item.variant || "Стандартний";
+
+    if (variantName !== "Стандартний") {
+        const variant = product.variants?.find(v => v.name === variantName);
+        return Number(variant?.stock || 0);
+    }
+
+    return Number(product.stock || 0);
+}
+
+function validateCart(cart) {
+    for (const item of cart) {
+        const product = products.find(p => p._id === item.id);
+
+        if (!product) {
+            showToast("У кошику є товар, якого вже немає в наявності", "error");
+            return false;
+        }
+
+        const stock = getProductStock(product, item);
+
+        if (stock <= 0 || item.quantity > stock) {
+            showToast(`Недостатньо товару: ${product.title}`, "error");
+            return false;
+        }
+    }
+
+    return true;
 }
 
 cityInput.addEventListener("input", async () => {
@@ -24,24 +56,22 @@ cityInput.addEventListener("input", async () => {
     const response = await fetch(`${API_URL}/api/cities?search=${encodeURIComponent(search)}`);
     const cities = await response.json();
 
-    citiesList.innerHTML = "";
-
-    cities.forEach(city => {
-        const item = document.createElement("div");
-        item.className = "suggestion-item";
-        item.textContent = `${city.Description} (${city.AreaDescription})`;
-
-        item.onclick = () => {
-            selectedCity = city;
-            cityInput.value = city.Description;
-            citiesList.style.display = "none";
-            loadWarehouses(city.Ref);
-        };
-
-        citiesList.appendChild(item);
-    });
+    citiesList.innerHTML = cities.map(city => `
+        <div class="suggestion-item" data-ref="${city.Ref}" data-city="${city.Description}">
+            ${city.Description} (${city.AreaDescription})
+        </div>
+    `).join("");
 
     citiesList.style.display = cities.length ? "block" : "none";
+
+    document.querySelectorAll(".suggestion-item").forEach(item => {
+        item.onclick = () => {
+            selectedCity = item.dataset.ref;
+            cityInput.value = item.dataset.city;
+            citiesList.style.display = "none";
+            loadWarehouses(selectedCity);
+        };
+    });
 });
 
 async function loadWarehouses(cityRef) {
@@ -65,42 +95,37 @@ checkoutForm.addEventListener("submit", async (event) => {
 
     const cart = JSON.parse(localStorage.getItem("cart")) || [];
 
-    if (cart.length === 0) {
+    if (!cart.length) {
         showToast("Кошик порожній", "error");
+        return;
+    }
+
+    if (!validateCart(cart)) return;
+
+    const phone = document.getElementById("customerPhone").value.trim();
+
+    if (!/^(\+380|380|0)\d{9}$/.test(phone)) {
+        showToast("Введіть коректний номер телефону", "error");
         return;
     }
 
     const items = cart.map(item => {
         const product = products.find(p => p._id === item.id);
-
-        if (!product) return "";
-
         const variant = item.variant || "Стандартний";
-
         return `${product.title} (${variant}) x${item.quantity}`;
     }).join("\n");
 
     const total = cart.reduce((sum, item) => {
         const product = products.find(p => p._id === item.id);
-
-        if (!product) return sum;
-
         return sum + product.price * item.quantity;
     }, 0);
-
-    const phone = document.getElementById("customerPhone").value.trim();
-
-if (!/^(\+380|380|0)\d{9}$/.test(phone)) {
-    showToast("Введіть коректний номер телефону", "error");
-    return;
-}
 
     const order = {
         surname: document.getElementById("customerSurname").value.trim(),
         name: document.getElementById("customerName").value.trim(),
         middleName: document.getElementById("customerMiddleName").value.trim(),
         phone,
-paymentMethod: document.getElementById("paymentMethod").value,
+        paymentMethod: document.getElementById("paymentMethod").value,
         city: cityInput.value.trim(),
         warehouse: warehouseSelect.value,
         comment: document.getElementById("customerComment").value.trim(),
@@ -111,21 +136,16 @@ paymentMethod: document.getElementById("paymentMethod").value,
 
     const response = await fetch(`${API_URL}/api/order`, {
         method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(order)
     });
 
     if (response.ok) {
         localStorage.removeItem("cart");
-        showToast("Замовлення успішно оформлено");
-
-        setTimeout(() => {
-            window.location.href = "index.html";
-        }, 1500);
+        window.location.href = "success.html";
     } else {
-        showToast("Помилка оформлення замовлення", "error");
+        const data = await response.json().catch(() => ({}));
+        showToast(data.message || "Помилка оформлення замовлення", "error");
     }
 });
 

@@ -3,30 +3,34 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Вибране — Mobilix</title>
-
+    <title>Вибране | Mobilix</title>
+    <meta name="description" content="Товари, які ви додали в обране в магазині Mobilix.">
+    <link rel="icon" type="image/png" href="Images/favicon.png">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Вибране | Mobilix">
+    <meta property="og:description" content="Товари, які ви додали в обране в магазині Mobilix.">
+    <meta property="og:image" content="https://ferentrix-dev.github.io/mobilix-store/Images/favicon.png">
     <link rel="stylesheet" href="styles.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 </head>
 <body>
-
 <section class="favorites-page">
-
     <a href="catalog.html" class="back-link">← До каталогу</a>
-
-    <div class="page-hero">
-        <span>Mobilix</span>
-        <h1>Вибране</h1>
-        <p>Товари, які ви додали в обране.</p>
-    </div>
-
+    <div class="page-hero"><span>Mobilix</span><h1>Вибране</h1><p>Товари, які ви додали в обране.</p></div>
     <div class="products-grid" id="favoritesGrid"></div>
-
 </section>
-
-<script src="favorites.js"></script>
+<footer class="site-footer">
+    <div class="footer-logo">Mobi<span>lix</span></div>
+    <div class="footer-links">
+        <a href="about.html">Про нас</a>
+        <a href="delivery.html">Доставка і оплата</a>
+        <a href="warranty.html">Гарантія</a>
+        <a href="contacts.html">Контакти</a>
+    </div>
+    <p>© 2026 Mobilix. Мобільні аксесуари з доставкою по Україні.</p>
+</footer>
 <script src="toast.js"></script>
-
+<script src="favorites.js"></script>
 </body>
 </html>

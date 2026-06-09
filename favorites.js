@@ -11,27 +11,20 @@ function saveFavorites(favorites) {
     localStorage.setItem("favorites", JSON.stringify(favorites));
 }
 
-function removeFavorite(productId) {
-    const favorites = getFavorites().filter(id => id !== productId);
-    saveFavorites(favorites);
-    renderFavorites();
+function cleanFavorites() {
+    const activeFavorites = getFavorites().filter(id => products.some(product => product._id === id));
+    saveFavorites(activeFavorites);
 }
 
-async function loadProducts() {
-    const response = await fetch(`${API_URL}/api/products`);
-    products = await response.json();
-
+function removeFavorite(productId) {
+    saveFavorites(getFavorites().filter(id => id !== productId));
     renderFavorites();
 }
 
 function renderFavorites() {
-    const favorites = getFavorites();
+    const favoriteProducts = products.filter(product => getFavorites().includes(product._id));
 
-    const favoriteProducts = products.filter(product =>
-        favorites.includes(product._id)
-    );
-
-    if (favoriteProducts.length === 0) {
+    if (!favoriteProducts.length) {
         favoritesGrid.innerHTML = `
             <div class="empty-cart">
                 <h2>Вибране порожнє</h2>
@@ -42,39 +35,33 @@ function renderFavorites() {
         return;
     }
 
-    favoritesGrid.innerHTML = "";
+    favoritesGrid.innerHTML = favoriteProducts.map(product => `
+        <div class="product-card">
+            <button class="favorite-btn active" onclick="removeFavorite('${product._id}')" type="button" aria-label="Видалити з обраного">
+                <i class="fa-solid fa-heart"></i>
+            </button>
 
-    favoriteProducts.forEach(product => {
-        favoritesGrid.innerHTML += `
-            <div class="product-card">
+            <a href="product.html?id=${product._id}" class="favorite-product-link">
+                <img src="${product.image}" alt="${product.title}">
+                <span class="product-category-label">${product.category}</span>
+                <h3>${product.title}</h3>
+                <p>${product.description}</p>
+                <strong>${product.price} ₴</strong>
+                <div class="product-card-btn">Переглянути товар</div>
+            </a>
+        </div>
+    `).join("");
+}
 
-                <button 
-                    class="favorite-btn active"
-                    onclick="removeFavorite('${product._id}')"
-                    type="button"
-                >
-                    <i class="fa-solid fa-heart"></i>
-                </button>
-
-                <a href="product.html?id=${product._id}" class="favorite-product-link">
-                    <img src="${product.image}" alt="${product.title}">
-
-                    <span class="product-category-label">${product.category}</span>
-
-                    <h3>${product.title}</h3>
-
-                    <p>${product.description}</p>
-
-                    <strong>${product.price} ₴</strong>
-
-                    <div class="product-card-btn">
-                        Переглянути товар
-                    </div>
-                </a>
-
-            </div>
-        `;
-    });
+async function loadProducts() {
+    try {
+        const response = await fetch(`${API_URL}/api/products`);
+        products = await response.json();
+        cleanFavorites();
+        renderFavorites();
+    } catch (error) {
+        favoritesGrid.innerHTML = `<div class="empty-cart"><h2>Помилка завантаження</h2><p>Спробуйте оновити сторінку.</p></div>`;
+    }
 }
 
 loadProducts();

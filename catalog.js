@@ -1,42 +1,58 @@
 const API_URL = "https://site--mobilix-backend--98z6fhqjkxml.code.run";
-let products = [];
 
 const productsGrid = document.getElementById("productsGrid");
 const searchInput = document.getElementById("searchInput");
 const categoryFilter = document.getElementById("categoryFilter");
 
-function getFavorites() {
-    return JSON.parse(localStorage.getItem("favorites")) || [];
+let products = [];
+
+function getStorageArray(key) {
+    return JSON.parse(localStorage.getItem(key)) || [];
 }
 
-function saveFavorites(favorites) {
-    localStorage.setItem("favorites", JSON.stringify(favorites));
+function saveStorageArray(key, value) {
+    localStorage.setItem(key, JSON.stringify(value));
 }
 
 function isFavorite(productId) {
-    return getFavorites().includes(productId);
+    return getStorageArray("favorites").includes(productId);
 }
 
 function toggleFavorite(productId, event) {
     event.preventDefault();
     event.stopPropagation();
 
-    let favorites = getFavorites();
+    let favorites = getStorageArray("favorites");
+    favorites = favorites.includes(productId)
+        ? favorites.filter(id => id !== productId)
+        : [...favorites, productId];
 
-    if (favorites.includes(productId)) {
-        favorites = favorites.filter(id => id !== productId);
-    } else {
-        favorites.push(productId);
-    }
-
-    saveFavorites(favorites);
+    saveStorageArray("favorites", favorites);
     filterProducts();
 }
 
-function renderProducts(items) {
-    productsGrid.innerHTML = "";
+function addToCompare(productId, event) {
+    event.preventDefault();
+    event.stopPropagation();
 
-    if (items.length === 0) {
+    let compare = getStorageArray("compare");
+
+    if (compare.includes(productId)) {
+        showToast("Товар вже є в порівнянні", "info");
+        return;
+    }
+
+    compare.push(productId);
+    saveStorageArray("compare", compare);
+    showToast("Товар додано до порівняння");
+}
+
+function getAvailableVariants(product) {
+    return (product.variants || []).filter(variant => Number(variant.stock || 0) > 0);
+}
+
+function renderProducts(items) {
+    if (!items.length) {
         productsGrid.innerHTML = `
             <div class="empty-cart">
                 <h2>Нічого не знайдено</h2>
@@ -46,62 +62,33 @@ function renderProducts(items) {
         return;
     }
 
-    items.forEach(product => {
-        const productId = product._id;
-        const favoriteActive = isFavorite(productId);
+    productsGrid.innerHTML = items.map(product => {
+        const variants = getAvailableVariants(product);
+        const favoriteActive = isFavorite(product._id);
 
-        productsGrid.innerHTML += `
-            <a href="product.html?id=${productId}" class="product-card">
-
-                <button
-                    class="favorite-btn ${favoriteActive ? "active" : ""}"
-                    onclick="toggleFavorite('${productId}', event)"
-                    type="button"
-                >
+        return `
+            <a href="product.html?id=${product._id}" class="product-card">
+                <button class="favorite-btn ${favoriteActive ? "active" : ""}" onclick="toggleFavorite('${product._id}', event)" type="button" aria-label="Додати в обране">
                     <i class="${favoriteActive ? "fa-solid" : "fa-regular"} fa-heart"></i>
                 </button>
 
                 <img src="${product.image}" alt="${product.title}">
-
-                <span class="product-category-label">
-                    ${product.category}
-                </span>
-
+                <span class="product-category-label">${product.category}</span>
                 <h3>${product.title}</h3>
-
                 <p>${product.description}</p>
 
-${
-    product.variants && product.variants.filter(v => v.stock > 0).length > 0
-    ? `
-        <div class="product-variants-preview">
-            ${product.variants
-                .filter(variant => variant.stock > 0)
-                .map(variant => `
-                    <span>${variant.name} · ${variant.stock} шт.</span>
-                `).join("")}
-        </div>
-    `
-    : ""
-}
+                ${variants.length ? `
+                    <div class="product-variants-preview">
+                        ${variants.map(variant => `<span>${variant.name} · ${variant.stock} шт.</span>`).join("")}
+                    </div>
+                ` : ""}
 
-<strong>${product.price} ₴</strong>
-
-                <div class="product-card-btn">
-                    Переглянути товар
-                </div>
-
-                <button
-                    class="compare-btn"
-                    onclick="addToCompare('${productId}', event)"
-                    type="button"
-                >
-                    ⚖ Додати до порівняння
-                </button>
-
+                <strong>${product.price} ₴</strong>
+                <div class="product-card-btn">Переглянути товар</div>
+                <button class="compare-btn" onclick="addToCompare('${product._id}', event)" type="button">⚖ Додати до порівняння</button>
             </a>
         `;
-    });
+    }).join("");
 }
 
 function filterProducts() {
@@ -110,54 +97,39 @@ function filterProducts() {
 
     const filteredProducts = products.filter(product => {
         const titleMatch = product.title.toLowerCase().includes(searchValue);
-
-        const categoryMatch =
-            categoryValue === "all" ||
-            product.category.toLowerCase().trim() === categoryValue;
-
-        return titleMatch && categoryMatch;
+        const descriptionMatch = product.description.toLowerCase().includes(searchValue);
+        const categoryMatch = categoryValue === "all" || product.category.toLowerCase() === categoryValue;
+        return (titleMatch || descriptionMatch) && categoryMatch;
     });
 
     renderProducts(filteredProducts);
 }
 
-function addToCompare(productId, event) {
-    event.preventDefault();
-    event.stopPropagation();
+function applyUrlFilters() {
+    const params = new URLSearchParams(window.location.search);
+    const search = params.get("search") || "";
+    const category = params.get("category") || "all";
 
-    let compare = JSON.parse(localStorage.getItem("compare")) || [];
-
-    if (compare.includes(productId)) {
-        return;
-    }
-
-    if (compare.length >= 4) {
-        showToast("Максимум 4 товари для порівняння", "error");
-        return;
-    }
-
-    compare.push(productId);
-    localStorage.setItem("compare", JSON.stringify(compare));
-
-    showToast("Товар додано до порівняння");
+    searchInput.value = search;
+    categoryFilter.value = category;
 }
 
-async function initCatalog() {
-    const response = await fetch(`${API_URL}/api/products`);
-    products = await response.json();
-
-    const urlParams = new URLSearchParams(window.location.search);
-
-    const urlSearch = urlParams.get("search") || "";
-    const urlCategory = urlParams.get("category") || "all";
-
-    searchInput.value = urlSearch;
-    categoryFilter.value = urlCategory;
-
-    filterProducts();
+async function loadProducts() {
+    try {
+        const response = await fetch(`${API_URL}/api/products`);
+        products = await response.json();
+        applyUrlFilters();
+        filterProducts();
+    } catch (error) {
+        productsGrid.innerHTML = `
+            <div class="empty-cart">
+                <h2>Помилка завантаження</h2>
+                <p>Спробуйте оновити сторінку.</p>
+            </div>
+        `;
+    }
 }
 
 searchInput.addEventListener("input", filterProducts);
 categoryFilter.addEventListener("change", filterProducts);
-
-initCatalog();
+loadProducts();

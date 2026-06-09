@@ -3,24 +3,33 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Кошик — Mobilix</title>
-
+    <title>Кошик | Mobilix</title>
+    <meta name="description" content="Перегляньте товари у кошику та оформіть замовлення в Mobilix.">
+    <link rel="icon" type="image/png" href="Images/favicon.png">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Кошик | Mobilix">
+    <meta property="og:description" content="Перегляньте товари у кошику та оформіть замовлення в Mobilix.">
+    <meta property="og:image" content="https://ferentrix-dev.github.io/mobilix-store/Images/favicon.png">
     <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 </head>
 <body>
-
 <section class="cart-page">
     <a href="catalog.html" class="back-link">← До каталогу</a>
-
-    <div class="page-hero">
-        <span>Mobilix</span>
-        <h1>Кошик</h1>
-        <p>Ваші товари зберігаються навіть після перезавантаження сторінки.</p>
-    </div>
-
+    <div class="page-hero"><span>Mobilix</span><h1>Кошик</h1><p>Перевірте товари перед оформленням замовлення.</p></div>
     <div id="cartContainer"></div>
 </section>
-
+<footer class="site-footer">
+    <div class="footer-logo">Mobi<span>lix</span></div>
+    <div class="footer-links">
+        <a href="about.html">Про нас</a>
+        <a href="delivery.html">Доставка і оплата</a>
+        <a href="warranty.html">Гарантія</a>
+        <a href="contacts.html">Контакти</a>
+    </div>
+    <p>© 2026 Mobilix. Мобільні аксесуари з доставкою по Україні.</p>
+</footer>
 <script src="toast.js"></script>
 <script src="cart.js"></script>
 </body>
