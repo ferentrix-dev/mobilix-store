@@ -19,9 +19,18 @@
     <div class="success-card">
         <div class="success-icon">✅</div>
         <h1>Замовлення успішно оформлено</h1>
-        <p>Дякуємо за покупку в Mobilix. Ми скоро зв’яжемося з вами для підтвердження замовлення.</p>
+        <p id="successText">Дякуємо за покупку в Mobilix. Ми скоро зв’яжемося з вами для підтвердження замовлення.</p>
         <a href="index.html" class="success-btn">Повернутися на головну</a>
     </div>
 </div>
+
+<script>
+    const orderNumber = localStorage.getItem("lastOrderNumber");
+
+    if (orderNumber) {
+        document.getElementById("successText").textContent =
+            `Ваше замовлення №${orderNumber} успішно оформлено. Ми скоро зв’яжемося з вами для підтвердження.`;
+    }
+</script>
 </body>
 </html>

@@ -141,6 +141,12 @@ checkoutForm.addEventListener("submit", async (event) => {
     });
 
     if (response.ok) {
+        const data = await response.json().catch(() => ({}));
+
+        if (data.orderNumber) {
+            localStorage.setItem("lastOrderNumber", String(data.orderNumber));
+        }
+
         localStorage.removeItem("cart");
         window.location.href = "success.html";
     } else {
