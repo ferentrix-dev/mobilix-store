@@ -460,7 +460,7 @@ async function updateStatus(orderId) {
             Authorization: "Bearer " + token
         },
         body: JSON.stringify({ status })
-    });
+    }); 
 
     const data = await response.json();
 
