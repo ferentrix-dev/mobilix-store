@@ -5,9 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>Mobilix Admin</title>
-        <link rel="icon" type="image/png" href="Images/favicon.png">
-
-
+        <link rel="icon" href="Images/favicon.png">
 <style>
 *{
     margin:0;
@@ -31,6 +29,7 @@ body{
     display:flex;
     justify-content:space-between;
     align-items:center;
+    flex-wrap:wrap;
     gap:16px;
     margin-bottom:28px;
     background:white;
@@ -326,6 +325,8 @@ button:hover{
         grid-template-columns:1fr;
     }
 }
+
+
 </style>
 
 </head>
@@ -339,6 +340,22 @@ button:hover{
         <button class="logout-btn" onclick="logout()">
             Вийти
         </button>
+        <a
+    href="admin-orders.html"
+    style="
+        height:44px;
+        padding:0 18px;
+        border-radius:12px;
+        background:#2563eb;
+        color:white;
+        text-decoration:none;
+        display:flex;
+        align-items:center;
+        font-weight:700;
+    "
+>
+    Замовлення
+</a>
     </div>
 
     <div class="grid">

@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Замовлення — Mobilix Admin</title>
+
+<link rel="icon" type="image/png" href="Images/favicon.png">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+    font-family:'Inter',sans-serif;
+    background:#f4f7fb;
+    color:#111827;
+    padding:24px;
+}
+
+.admin-container{
+    max-width:1250px;
+    margin:0 auto;
+}
+
+.topbar{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:16px;
+    margin-bottom:28px;
+    background:white;
+    padding:18px 22px;
+    border-radius:22px;
+    box-shadow:0 12px 35px rgba(15,23,42,.06);
+}
+
+.topbar h1{
+    font-size:28px;
+    font-weight:800;
+}
+
+.topbar-actions{
+    display:flex;
+    gap:10px;
+    flex-wrap:wrap;
+}
+
+.topbar-actions a,
+.topbar-actions button{
+    height:44px;
+    padding:0 16px;
+    border:none;
+    border-radius:12px;
+    cursor:pointer;
+    font-weight:700;
+    text-decoration:none;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+}
+
+.admin-link{
+    background:#2563eb;
+    color:white;
+}
+
+.logout-btn{
+    background:#ef4444;
+    color:white;
+}
+
+.orders-list{
+    display:grid;
+    gap:18px;
+}
+
+.order-card{
+    background:white;
+    border:1px solid #e5e7eb;
+    border-radius:22px;
+    padding:22px;
+    box-shadow:0 12px 35px rgba(15,23,42,.05);
+}
+
+.order-head{
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-start;
+    gap:16px;
+    margin-bottom:18px;
+}
+
+.order-head h2{
+    font-size:20px;
+    font-weight:800;
+    margin-bottom:6px;
+}
+
+.order-date{
+    color:#6b7280;
+    font-size:14px;
+}
+
+.badges{
+    display:flex;
+    gap:8px;
+    flex-wrap:wrap;
+    justify-content:flex-end;
+}
+
+.badge{
+    padding:7px 10px;
+    border-radius:999px;
+    font-size:13px;
+    font-weight:800;
+}
+
+.status-new{
+    background:#dbeafe;
+    color:#1d4ed8;
+}
+
+.status-processing{
+    background:#fef3c7;
+    color:#92400e;
+}
+
+.status-sent{
+    background:#dcfce7;
+    color:#166534;
+}
+
+.status-completed{
+    background:#e0e7ff;
+    color:#3730a3;
+}
+
+.status-cancelled{
+    background:#fee2e2;
+    color:#991b1b;
+}
+
+.telegram-ok{
+    background:#dcfce7;
+    color:#166534;
+}
+
+.telegram-bad{
+    background:#fee2e2;
+    color:#991b1b;
+}
+
+.order-grid{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:14px;
+    margin-bottom:18px;
+}
+
+.info-box{
+    background:#f9fafb;
+    border:1px solid #eef2f7;
+    border-radius:16px;
+    padding:14px;
+}
+
+.info-box span{
+    display:block;
+    color:#6b7280;
+    font-size:13px;
+    font-weight:700;
+    margin-bottom:6px;
+}
+
+.info-box strong,
+.info-box p{
+    font-size:15px;
+    line-height:1.5;
+    white-space:pre-wrap;
+}
+
+.items-box{
+    grid-column:1 / -1;
+}
+
+.total{
+    font-size:22px;
+    font-weight:800;
+    color:#2563eb;
+}
+
+.order-actions{
+    display:flex;
+    gap:10px;
+    flex-wrap:wrap;
+    align-items:center;
+}
+
+.order-actions select{
+    height:44px;
+    min-width:190px;
+    border:1px solid #e5e7eb;
+    border-radius:12px;
+    padding:0 12px;
+    font-weight:700;
+    background:white;
+}
+
+.order-actions button{
+    height:44px;
+    padding:0 16px;
+    border:none;
+    border-radius:12px;
+    cursor:pointer;
+    font-weight:800;
+}
+
+.save-btn{
+    background:#2563eb;
+    color:white;
+}
+
+.telegram-btn{
+    background:#111827;
+    color:white;
+}
+
+.empty{
+    background:white;
+    border-radius:22px;
+    padding:34px;
+    text-align:center;
+    color:#6b7280;
+}
+
+@media(max-width:760px){
+    body{
+        padding:14px;
+    }
+
+    .topbar{
+        flex-direction:column;
+        align-items:flex-start;
+    }
+
+    .order-head{
+        flex-direction:column;
+    }
+
+    .badges{
+        justify-content:flex-start;
+    }
+
+    .order-grid{
+        grid-template-columns:1fr;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="admin-container">
+
+    <div class="topbar">
+        <h1>Замовлення Mobilix</h1>
+
+        <div class="topbar-actions">
+            <a href="admin.html" class="admin-link">Товари</a>
+            <button class="logout-btn" onclick="logout()">Вийти</button>
+        </div>
+    </div>
+
+    <div class="orders-list" id="ordersList"></div>
+
+</div>
+
+<script>
+const API_URL = "https://site--mobilix-backend--98z6fhqjkxml.code.run";
+
+const token =
+    sessionStorage.getItem("adminToken") ||
+    localStorage.getItem("adminToken");
+
+const ordersList = document.getElementById("ordersList");
+
+if (!token) {
+    window.location.replace("admin-login.html");
+}
+
+function getStatusText(status) {
+    const statuses = {
+        new: "Нове",
+        processing: "В обробці",
+        sent: "Відправлено",
+        completed: "Завершено",
+        cancelled: "Скасовано"
+    };
+
+    return statuses[status] || "Нове";
+}
+
+function formatDate(date) {
+    return new Date(date).toLocaleString("uk-UA", {
+        day: "2-digit",
+        month: "2-digit",
+        year: "numeric",
+        hour: "2-digit",
+        minute: "2-digit"
+    });
+}
+
+async function loadOrders() {
+    try {
+        const response = await fetch(`${API_URL}/api/admin/orders`, {
+            headers: {
+                Authorization: "Bearer " + token
+            }
+        });
+
+        const data = await response.json();
+
+        if (!response.ok || !data.success) {
+            throw new Error(data.message || "Не вдалося завантажити замовлення");
+        }
+
+        renderOrders(data.orders);
+    } catch (error) {
+        ordersList.innerHTML = `
+            <div class="empty">
+                <h2>Помилка</h2>
+                <p>${error.message}</p>
+            </div>
+        `;
+    }
+}
+
+function renderOrders(orders) {
+    if (!orders || orders.length === 0) {
+        ordersList.innerHTML = `
+            <div class="empty">
+                <h2>Замовлень ще немає</h2>
+                <p>Коли клієнт оформить замовлення, воно зʼявиться тут.</p>
+            </div>
+        `;
+        return;
+    }
+
+    ordersList.innerHTML = orders.map(order => {
+        const status = order.status || "new";
+        const telegramSent = Boolean(order.telegramSent);
+
+        return `
+            <div class="order-card">
+                <div class="order-head">
+                    <div>
+                        <h2>Замовлення #${order._id}</h2>
+                        <div class="order-date">${formatDate(order.createdAt)}</div>
+                    </div>
+
+                    <div class="badges">
+                        <span class="badge status-${status}">
+                            ${getStatusText(status)}
+                        </span>
+
+                        <span class="badge ${telegramSent ? "telegram-ok" : "telegram-bad"}">
+                            Telegram: ${telegramSent ? "надіслано" : "не надіслано"}
+                        </span>
+                    </div>
+                </div>
+
+                <div class="order-grid">
+                    <div class="info-box">
+                        <span>Клієнт</span>
+                        <strong>${order.surname || ""} ${order.name || ""} ${order.middleName || ""}</strong>
+                    </div>
+
+                    <div class="info-box">
+                        <span>Телефон</span>
+                        <strong>${order.phone || "Не вказано"}</strong>
+                    </div>
+
+                    <div class="info-box">
+                        <span>Місто</span>
+                        <strong>${order.city || "Не вказано"}</strong>
+                    </div>
+
+                    <div class="info-box">
+                        <span>Відділення</span>
+                        <strong>${order.warehouse || "Не вказано"}</strong>
+                    </div>
+
+                    <div class="info-box">
+                        <span>Оплата</span>
+                        <strong>${order.paymentMethod || "Не вказано"}</strong>
+                    </div>
+
+                    <div class="info-box">
+                        <span>Сума</span>
+                        <strong class="total">${order.total || 0} ₴</strong>
+                    </div>
+
+                    <div class="info-box items-box">
+                        <span>Товари</span>
+                        <p>${order.items || "Немає даних"}</p>
+                    </div>
+
+                    <div class="info-box items-box">
+                        <span>Коментар</span>
+                        <p>${order.comment || "Без коментаря"}</p>
+                    </div>
+
+                    ${
+                        order.telegramError
+                        ? `
+                            <div class="info-box items-box">
+                                <span>Помилка Telegram</span>
+                                <p>${order.telegramError}</p>
+                            </div>
+                        `
+                        : ""
+                    }
+                </div>
+
+                <div class="order-actions">
+                    <select id="status-${order._id}">
+                        <option value="new" ${status === "new" ? "selected" : ""}>Нове</option>
+                        <option value="processing" ${status === "processing" ? "selected" : ""}>В обробці</option>
+                        <option value="sent" ${status === "sent" ? "selected" : ""}>Відправлено</option>
+                        <option value="completed" ${status === "completed" ? "selected" : ""}>Завершено</option>
+                        <option value="cancelled" ${status === "cancelled" ? "selected" : ""}>Скасовано</option>
+                    </select>
+
+                    <button class="save-btn" onclick="updateStatus('${order._id}')">
+                        Зберегти статус
+                    </button>
+
+                    <button class="telegram-btn" onclick="resendTelegram('${order._id}')">
+                        Надіслати в Telegram ще раз
+                    </button>
+                </div>
+            </div>
+        `;
+    }).join("");
+}
+
+async function updateStatus(orderId) {
+    const status = document.getElementById(`status-${orderId}`).value;
+
+    const response = await fetch(`${API_URL}/api/admin/orders/${orderId}/status`, {
+        method: "PATCH",
+        headers: {
+            "Content-Type": "application/json",
+            Authorization: "Bearer " + token
+        },
+        body: JSON.stringify({ status })
+    });
+
+    const data = await response.json();
+
+    if (response.ok && data.success) {
+        alert("Статус оновлено");
+        loadOrders();
+    } else {
+        alert(data.message || "Помилка оновлення статусу");
+    }
+}
+
+async function resendTelegram(orderId) {
+    const response = await fetch(`${API_URL}/api/admin/orders/${orderId}/resend-telegram`, {
+        method: "POST",
+        headers: {
+            Authorization: "Bearer " + token
+        }
+    });
+
+    const data = await response.json();
+
+    if (response.ok && data.success) {
+        alert("Повідомлення повторно надіслано в Telegram");
+        loadOrders();
+    } else {
+        alert(data.message || "Помилка повторної відправки Telegram");
+    }
+}
+
+function logout() {
+    sessionStorage.removeItem("adminToken");
+    localStorage.removeItem("adminToken");
+    window.location.href = "admin-login.html";
+}
+
+loadOrders();
+</script>
+
+</body>
+</html>
