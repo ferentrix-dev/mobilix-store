@@ -11,53 +11,80 @@ function saveCart(cart) {
     localStorage.setItem("cart", JSON.stringify(cart));
 }
 
-function getAvailableStock(product, item) {
+function getProductImages(product) {
+    const images = product.images?.length ? product.images : [product.image];
+    return images.filter(Boolean);
+}
+
+function getVariant(product, item) {
     const variantName = item.variant || "Стандартний";
 
-    if (variantName !== "Стандартний") {
-        const variant = product.variants?.find(v => v.name === variantName);
-        return Number(variant?.stock || 0);
+    if (variantName === "Стандартний") {
+        return null;
     }
 
-    return Number(product.stock || 0);
+    return product.variants?.find(variant => variant.name === variantName) || null;
 }
 
-function getCartItemImage(product, item) {
-    const variantName = item.variant || "Стандартний";
-
-    if (variantName === "Стандартний") return product.image;
-
-    const variant = product.variants?.find(v => v.name === variantName);
-    return variant?.image || product.image;
+function getItemStock(product, item) {
+    const variant = getVariant(product, item);
+    return Number(variant ? variant.stock : product.stock || 0);
 }
 
-function cleanCart() {
-    const cleanItems = getCart()
+function getItemPrice(product, item) {
+    const variant = getVariant(product, item);
+    return Number(variant?.price || product.price || 0);
+}
+
+function getItemImage(product, item) {
+    const variant = getVariant(product, item);
+
+    if (variant?.image) {
+        return variant.image;
+    }
+
+    return getProductImages(product)[0] || "";
+}
+
+function normalizeCart() {
+    const cart = getCart();
+
+    const normalizedCart = cart
         .map(item => {
-            const product = products.find(p => p._id === item.id);
-            if (!product) return null;
+            const product = products.find(product => product._id === item.id);
 
-            const stock = getAvailableStock(product, item);
-            if (stock <= 0) return null;
+            if (!product) {
+                return null;
+            }
+
+            const stock = getItemStock(product, item);
+
+            if (stock <= 0) {
+                return null;
+            }
 
             return {
                 ...item,
+                price: getItemPrice(product, item),
                 quantity: Math.min(Number(item.quantity || 1), stock)
             };
         })
         .filter(Boolean);
 
-    saveCart(cleanItems);
+    saveCart(normalizedCart);
 }
 
 function changeQuantity(productId, variantName, amount) {
     const cart = getCart();
-    const item = cart.find(i => i.id === productId && (i.variant || "Стандартний") === variantName);
-    const product = products.find(p => p._id === productId);
+    const item = cart.find(item => {
+        return item.id === productId && (item.variant || "Стандартний") === variantName;
+    });
+
+    const product = products.find(product => product._id === productId);
 
     if (!item || !product) return;
 
-    const stock = getAvailableStock(product, item);
+    const stock = getItemStock(product, item);
 
     if (amount > 0 && item.quantity >= stock) {
         showToast(`В наявності лише ${stock} шт.`, "error");
@@ -65,6 +92,7 @@ function changeQuantity(productId, variantName, amount) {
     }
 
     item.quantity += amount;
+    item.price = getItemPrice(product, item);
 
     if (item.quantity <= 0) {
         removeFromCart(productId, variantName);
@@ -76,7 +104,10 @@ function changeQuantity(productId, variantName, amount) {
 }
 
 function removeFromCart(productId, variantName) {
-    const cart = getCart().filter(i => !(i.id === productId && (i.variant || "Стандартний") === variantName));
+    const cart = getCart().filter(item => {
+        return !(item.id === productId && (item.variant || "Стандартний") === variantName);
+    });
+
     saveCart(cart);
     renderCart();
 }
@@ -98,39 +129,46 @@ function renderCart() {
     let total = 0;
 
     const itemsHtml = cart.map(item => {
-        const product = products.find(p => p._id === item.id);
+        const product = products.find(product => product._id === item.id);
         if (!product) return "";
 
-        const variantText = item.variant || "Стандартний";
-        const stock = getAvailableStock(product, item);
-        const itemTotal = product.price * item.quantity;
+        const variantName = item.variant || "Стандартний";
+        const price = getItemPrice(product, item);
+        const stock = getItemStock(product, item);
+        const itemTotal = price * item.quantity;
+
         total += itemTotal;
 
         return `
             <div class="cart-item">
-                <img src="${getCartItemImage(product, item)}" alt="${product.title}">
+                <img src="${getItemImage(product, item)}" alt="${product.title}">
 
                 <div class="cart-item-info">
                     <h3>${product.title}</h3>
                     <p>${product.category}</p>
-                    <p class="cart-variant">Тип: ${variantText}</p>
+                    <p class="cart-variant">Тип: ${variantName}</p>
                     <p class="cart-stock">В наявності: ${stock} шт.</p>
+                    <p>Ціна: ${price} ₴</p>
                 </div>
 
                 <div class="cart-quantity">
-                    <button onclick="changeQuantity('${product._id}', '${variantText}', -1)">−</button>
+                    <button onclick="changeQuantity('${product._id}', '${variantName}', -1)" type="button">−</button>
                     <span>${item.quantity}</span>
-                    <button onclick="changeQuantity('${product._id}', '${variantText}', 1)">+</button>
+                    <button onclick="changeQuantity('${product._id}', '${variantName}', 1)" type="button">+</button>
                 </div>
 
                 <div class="cart-item-total">${itemTotal} ₴</div>
-                <button class="remove-btn" onclick="removeFromCart('${product._id}', '${variantText}')">Видалити</button>
+
+                <button class="remove-btn" onclick="removeFromCart('${product._id}', '${variantName}')" type="button">
+                    Видалити
+                </button>
             </div>
         `;
     }).join("");
 
     cartContainer.innerHTML = `
         <div class="cart-list">${itemsHtml}</div>
+
         <div class="cart-summary">
             <h2>Разом: ${total} ₴</h2>
             <a href="checkout.html" class="checkout-btn">Оформити замовлення</a>
@@ -142,9 +180,10 @@ async function loadProducts() {
     try {
         const response = await fetch(`${API_URL}/api/products`);
         products = await response.json();
-        cleanCart();
+
+        normalizeCart();
         renderCart();
-    } catch (error) {
+    } catch {
         cartContainer.innerHTML = `
             <div class="empty-cart">
                 <h2>Помилка завантаження кошика</h2>

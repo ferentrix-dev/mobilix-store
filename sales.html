@@ -3,22 +3,27 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Товар | Mobilix</title>
-    <meta name="description" content="Сторінка товару Mobilix.">
+    <title>Акції та знижки | Mobilix</title>
+    <meta name="description" content="Акційні товари Mobilix зі знижками. Чохли, кабелі, зарядки та аксесуари для смартфонів.">
     <link rel="icon" href="Images/favicon.png">
-    <meta property="og:type" content="website">
-    <meta property="og:title" content="Товар | Mobilix">
-    <meta property="og:description" content="Сторінка товару Mobilix.">
-    <meta property="og:image" content="https://ferentrix-dev.github.io/mobilix-store/Images/favicon.png">
     <link rel="stylesheet" href="styles.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 </head>
 <body>
-<section class="product-page">
-    <a href="catalog.html" class="back-link">← Назад до каталогу</a>
-    <div id="productContainer"></div>
+
+<section class="catalog-page">
+    <a href="index.html" class="back-link">← На головну</a>
+
+    <div class="page-hero">
+        <span>Mobilix</span>
+        <h1>Акції та знижки</h1>
+        <p>Товари зі знижками. Кількість акційних товарів може бути обмежена.</p>
+    </div>
+
+    <div class="products-grid" id="salesGrid"></div>
 </section>
+
 <footer class="site-footer">
     <div class="footer-logo">Mobi<span>lix</span></div>
 
@@ -33,7 +38,8 @@
 
     <p>© 2026 Mobilix. Мобільні аксесуари з доставкою по Україні.</p>
 </footer>
+
 <script src="toast.js"></script>
-<script src="product.js"></script>
+<script src="sales.js"></script>
 </body>
 </html>

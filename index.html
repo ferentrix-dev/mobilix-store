@@ -23,6 +23,7 @@
             <li><a href="delivery.html">Доставка і оплата</a></li>
             <li><a href="warranty.html">Гарантія</a></li>
             <li><a href="contacts.html">Контакти</a></li>
+            <li><a href="faq.html">Питання та відповіді</a></li>
         </ul>
         <ul class="right-menu">
             <li><a href="https://maps.google.com/?q=Хмельницький" target="_blank" rel="noopener"><i class="fa-solid fa-location-dot"></i> Хмельницький</a></li>
@@ -99,12 +100,16 @@
 </section>
 <footer class="site-footer">
     <div class="footer-logo">Mobi<span>lix</span></div>
+
     <div class="footer-links">
         <a href="about.html">Про нас</a>
         <a href="delivery.html">Доставка і оплата</a>
         <a href="warranty.html">Гарантія</a>
         <a href="contacts.html">Контакти</a>
+        <a href="sales.html">Акції</a>
+        <a href="faq.html">Питання та відповіді</a>
     </div>
+
     <p>© 2026 Mobilix. Мобільні аксесуари з доставкою по Україні.</p>
 </footer>
 <script src="toast.js"></script>
@@ -131,7 +136,16 @@ async function updateCartInfo() {
         const products = await fetchProducts();
         cart.forEach(item => {
             const product = products.find(p => p._id === item.id);
-            if (product) { total += product.price * item.quantity; count += item.quantity; }
+            if (!product) return;
+
+            const variantName = item.variant || 'Стандартний';
+            const variant = variantName !== 'Стандартний'
+                ? product.variants?.find(v => v.name === variantName)
+                : null;
+            const price = Number(variant?.price || product.price || 0);
+
+            total += price * Number(item.quantity || 0);
+            count += Number(item.quantity || 0);
         });
     } catch (error) {}
     document.getElementById('cartCount').textContent = count;

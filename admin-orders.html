@@ -5,50 +5,373 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Замовлення — Mobilix Admin</title>
 <link rel="icon" type="image/png" href="Images/favicon.png">
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 
 <style>
-*{margin:0;padding:0;box-sizing:border-box}
-body{font-family:'Inter',sans-serif;background:#f4f7fb;color:#111827;padding:24px}
-.admin-container{max-width:1250px;margin:0 auto}
-.topbar{display:flex;justify-content:space-between;align-items:center;gap:16px;margin-bottom:28px;background:white;padding:18px 22px;border-radius:22px;box-shadow:0 12px 35px rgba(15,23,42,.06)}
-.topbar h1{font-size:28px;font-weight:800}
-.topbar-actions{display:flex;gap:10px;flex-wrap:wrap}
-.topbar-actions a,.topbar-actions button{height:44px;padding:0 16px;border:none;border-radius:12px;cursor:pointer;font-weight:700;text-decoration:none;display:flex;align-items:center;justify-content:center}
-.admin-link{background:#2563eb;color:white}
-.logout-btn{background:#ef4444;color:white}
-.orders-list{display:grid;gap:18px}
-.order-card{background:white;border:1px solid #e5e7eb;border-radius:22px;padding:22px;box-shadow:0 12px 35px rgba(15,23,42,.05)}
-.order-head{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;margin-bottom:18px}
-.order-head h2{font-size:20px;font-weight:800;margin-bottom:6px}
-.order-date{color:#6b7280;font-size:14px}
-.badges{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end}
-.badge{padding:7px 10px;border-radius:999px;font-size:13px;font-weight:800}
-.status-new{background:#dbeafe;color:#1d4ed8}
-.status-processing{background:#fef3c7;color:#92400e}
-.status-sent{background:#dcfce7;color:#166534}
-.status-completed{background:#e0e7ff;color:#3730a3}
-.status-cancelled{background:#fee2e2;color:#991b1b}
-.telegram-ok{background:#dcfce7;color:#166534}
-.telegram-bad{background:#fee2e2;color:#991b1b}
-.order-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin-bottom:18px}
-.info-box{background:#f9fafb;border:1px solid #eef2f7;border-radius:16px;padding:14px}
-.info-box span{display:block;color:#6b7280;font-size:13px;font-weight:700;margin-bottom:6px}
-.info-box strong,.info-box p{font-size:15px;line-height:1.5;white-space:pre-wrap}
-.items-box{grid-column:1 / -1}
-.total{font-size:22px;font-weight:800;color:#2563eb}
-.order-actions{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
-.order-actions select{height:44px;min-width:190px;border:1px solid #e5e7eb;border-radius:12px;padding:0 12px;font-weight:700;background:white}
-.order-actions button{height:44px;padding:0 16px;border:none;border-radius:12px;cursor:pointer;font-weight:800}
-.save-btn{background:#2563eb;color:white}
-.telegram-btn{background:#111827;color:white}
-.empty{background:white;border-radius:22px;padding:34px;text-align:center;color:#6b7280}
-@media(max-width:760px){
-body{padding:14px}
-.topbar{flex-direction:column;align-items:flex-start}
-.order-head{flex-direction:column}
-.badges{justify-content:flex-start}
-.order-grid{grid-template-columns:1fr}
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Inter, Arial, sans-serif;
+    background: #f4f7fb;
+    color: #111827;
+    padding: 24px;
+}
+
+.admin-container {
+    max-width: 1250px;
+    margin: 0 auto;
+}
+
+.topbar,
+.stat-card,
+.filters,
+.order-card,
+.empty {
+    background: #fff;
+    border-radius: 22px;
+    box-shadow: 0 12px 35px rgba(15, 23, 42, .06);
+}
+
+.topbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 22px;
+    padding: 18px 22px;
+}
+
+.topbar h1 {
+    font-size: 28px;
+    font-weight: 900;
+}
+
+.topbar-actions {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.topbar-actions a,
+.topbar-actions button {
+    height: 44px;
+    padding: 0 16px;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    font-weight: 800;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.admin-link {
+    background: #2563eb;
+    color: #fff;
+}
+
+.delete-all-btn {
+    background: #991b1b;
+    color: #fff;
+}
+
+.logout-btn {
+    background: #ef4444;
+    color: #fff;
+}
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 14px;
+    margin-bottom: 18px;
+}
+
+.stat-card {
+    padding: 18px;
+}
+
+.stat-card span {
+    display: block;
+    margin-bottom: 8px;
+    color: #6b7280;
+    font-size: 13px;
+    font-weight: 800;
+}
+
+.stat-card strong {
+    font-size: 26px;
+    font-weight: 900;
+}
+
+.filters {
+    display: grid;
+    grid-template-columns: 1fr 220px;
+    gap: 14px;
+    margin-bottom: 18px;
+    padding: 18px;
+}
+
+.filters input,
+.filters select {
+    width: 100%;
+    height: 48px;
+    border: 1px solid #e5e7eb;
+    border-radius: 14px;
+    padding: 0 14px;
+    outline: none;
+    font-size: 15px;
+    font-weight: 700;
+    background: #fff;
+}
+
+.filters input:focus,
+.filters select:focus,
+.order-actions select:focus {
+    border-color: #2563eb;
+    box-shadow: 0 0 0 4px rgba(37, 99, 235, .08);
+}
+
+.orders-list {
+    display: grid;
+    gap: 18px;
+}
+
+.order-card {
+    border: 1px solid #e5e7eb;
+    padding: 22px;
+}
+
+.order-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 16px;
+    margin-bottom: 18px;
+}
+
+.order-head h2 {
+    font-size: 20px;
+    font-weight: 900;
+    margin-bottom: 6px;
+}
+
+.order-date {
+    color: #6b7280;
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.badges {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+}
+
+.badge {
+    padding: 7px 10px;
+    border-radius: 999px;
+    font-size: 13px;
+    font-weight: 900;
+}
+
+.status-new {
+    background: #dbeafe;
+    color: #1d4ed8;
+}
+
+.status-processing {
+    background: #fef3c7;
+    color: #92400e;
+}
+
+.status-sent {
+    background: #dcfce7;
+    color: #166534;
+}
+
+.status-completed {
+    background: #e0e7ff;
+    color: #3730a3;
+}
+
+.status-cancelled {
+    background: #fee2e2;
+    color: #991b1b;
+}
+
+.telegram-ok {
+    background: #dcfce7;
+    color: #166534;
+}
+
+.telegram-bad {
+    background: #fee2e2;
+    color: #991b1b;
+}
+
+.order-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 14px;
+    margin-bottom: 18px;
+}
+
+.info-box {
+    background: #f9fafb;
+    border: 1px solid #eef2f7;
+    border-radius: 16px;
+    padding: 14px;
+}
+
+.info-box span {
+    display: block;
+    color: #6b7280;
+    font-size: 13px;
+    font-weight: 800;
+    margin-bottom: 6px;
+}
+
+.info-box strong,
+.info-box p {
+    font-size: 15px;
+    line-height: 1.5;
+    white-space: pre-wrap;
+}
+
+.items-box {
+    grid-column: 1 / -1;
+}
+
+.total {
+    font-size: 22px;
+    font-weight: 900;
+    color: #2563eb;
+}
+
+.order-actions {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+.order-actions select {
+    height: 44px;
+    min-width: 190px;
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+    padding: 0 12px;
+    font-weight: 800;
+    background: #fff;
+    outline: none;
+}
+
+.order-actions button {
+    height: 44px;
+    padding: 0 16px;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    font-weight: 900;
+}
+
+.save-btn {
+    background: #2563eb;
+    color: #fff;
+}
+
+.telegram-btn {
+    background: #111827;
+    color: #fff;
+}
+
+.delete-btn {
+    background: #ef4444;
+    color: #fff;
+}
+
+.copy-btn {
+    background: #f3f4f6;
+    color: #111827;
+}
+
+.empty {
+    padding: 34px;
+    text-align: center;
+    color: #6b7280;
+}
+
+.empty h2 {
+    color: #111827;
+    margin-bottom: 8px;
+}
+
+@media (max-width: 900px) {
+    body {
+        padding: 14px;
+    }
+
+    .topbar {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .topbar h1 {
+        text-align: center;
+        font-size: 22px;
+    }
+
+    .topbar-actions {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .filters {
+        grid-template-columns: 1fr;
+    }
+
+    .order-head {
+        flex-direction: column;
+    }
+
+    .badges {
+        justify-content: flex-start;
+    }
+
+    .order-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 520px) {
+    .stats-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .topbar-actions {
+        grid-template-columns: 1fr;
+    }
+
+    .order-actions {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .order-actions select,
+    .order-actions button {
+        width: 100%;
+    }
 }
 </style>
 </head>
@@ -57,11 +380,47 @@ body{padding:14px}
 <div class="admin-container">
     <div class="topbar">
         <h1>Замовлення Mobilix</h1>
+
         <div class="topbar-actions">
             <button class="delete-all-btn" onclick="deleteAllOrders()">Видалити всі</button>
             <a href="admin.html" class="admin-link">Товари</a>
             <button class="logout-btn" onclick="logout()">Вийти</button>
         </div>
+    </div>
+
+    <div class="stats-grid">
+        <div class="stat-card">
+            <span>Усього замовлень</span>
+            <strong id="totalOrders">0</strong>
+        </div>
+
+        <div class="stat-card">
+            <span>Нові</span>
+            <strong id="newOrders">0</strong>
+        </div>
+
+        <div class="stat-card">
+            <span>Відправлено</span>
+            <strong id="sentOrders">0</strong>
+        </div>
+
+        <div class="stat-card">
+            <span>Сума замовлень</span>
+            <strong id="totalSales">0 ₴</strong>
+        </div>
+    </div>
+
+    <div class="filters">
+        <input type="text" id="orderSearch" placeholder="Пошук: № замовлення, телефон, імʼя, місто...">
+
+        <select id="statusFilter">
+            <option value="all">Усі статуси</option>
+            <option value="new">Нові</option>
+            <option value="processing">В обробці</option>
+            <option value="sent">Відправлено</option>
+            <option value="completed">Завершено</option>
+            <option value="cancelled">Скасовано</option>
+        </select>
     </div>
 
     <div class="orders-list" id="ordersList"></div>
@@ -72,9 +431,22 @@ const API_URL = "https://site--mobilix-backend--98z6fhqjkxml.code.run";
 
 const token = sessionStorage.getItem("adminToken") || localStorage.getItem("adminToken");
 const ordersList = document.getElementById("ordersList");
+const orderSearch = document.getElementById("orderSearch");
+const statusFilter = document.getElementById("statusFilter");
+
+let orders = [];
 
 if (!token) {
     window.location.replace("admin-login.html");
+}
+
+function escapeHtml(value) {
+    return String(value || "")
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
 }
 
 function getStatusText(status) {
@@ -99,52 +471,69 @@ function formatDate(date) {
     });
 }
 
-async function loadOrders() {
-    try {
-        const response = await fetch(`${API_URL}/api/admin/orders`, {
-            headers: {
-                Authorization: "Bearer " + token
-            }
-        });
-
-        const data = await response.json();
-
-        if (!response.ok || !data.success) {
-            throw new Error(data.message || "Не вдалося завантажити замовлення");
-        }
-
-        renderOrders(data.orders);
-    } catch (error) {
-        ordersList.innerHTML = `
-            <div class="empty">
-                <h2>Помилка</h2>
-                <p>${error.message}</p>
-            </div>
-        `;
-    }
+function getVisibleNumber(order) {
+    return order.orderNumber || order._id;
 }
 
-function renderOrders(orders) {
-    if (!orders || orders.length === 0) {
+function updateStats() {
+    const total = orders.length;
+    const newCount = orders.filter(order => (order.status || "new") === "new").length;
+    const sentCount = orders.filter(order => (order.status || "new") === "sent").length;
+    const sales = orders.reduce((sum, order) => sum + Number(order.total || 0), 0);
+
+    document.getElementById("totalOrders").textContent = total;
+    document.getElementById("newOrders").textContent = newCount;
+    document.getElementById("sentOrders").textContent = sentCount;
+    document.getElementById("totalSales").textContent = `${sales} ₴`;
+}
+
+function getFilteredOrders() {
+    const search = orderSearch.value.toLowerCase().trim();
+    const status = statusFilter.value;
+
+    return orders.filter(order => {
+        const visibleNumber = String(getVisibleNumber(order)).toLowerCase();
+        const fullName = `${order.surname || ""} ${order.name || ""} ${order.middleName || ""}`.toLowerCase();
+        const phone = String(order.phone || "").toLowerCase();
+        const city = String(order.city || "").toLowerCase();
+        const items = String(order.items || "").toLowerCase();
+
+        const matchesSearch =
+            visibleNumber.includes(search) ||
+            fullName.includes(search) ||
+            phone.includes(search) ||
+            city.includes(search) ||
+            items.includes(search);
+
+        const matchesStatus = status === "all" || (order.status || "new") === status;
+
+        return matchesSearch && matchesStatus;
+    });
+}
+
+function renderOrders() {
+    const filteredOrders = getFilteredOrders();
+
+    if (!filteredOrders.length) {
         ordersList.innerHTML = `
             <div class="empty">
-                <h2>Замовлень ще немає</h2>
-                <p>Коли клієнт оформить замовлення, воно зʼявиться тут.</p>
+                <h2>Замовлень не знайдено</h2>
+                <p>Спробуйте змінити пошук або фільтр статусу.</p>
             </div>
         `;
         return;
     }
 
-    ordersList.innerHTML = orders.map(order => {
+    ordersList.innerHTML = filteredOrders.map(order => {
         const status = order.status || "new";
         const telegramSent = Boolean(order.telegramSent);
-        const visibleNumber = order.orderNumber || order._id;
+        const visibleNumber = getVisibleNumber(order);
 
         return `
             <div class="order-card">
                 <div class="order-head">
                     <div>
-                        <h2>Замовлення №${visibleNumber}</h2>
+                        <h2>Замовлення №${escapeHtml(visibleNumber)}</h2>
                         <div class="order-date">${formatDate(order.createdAt)}</div>
                     </div>
 
@@ -162,42 +551,42 @@ function renderOrders(orders) {
                 <div class="order-grid">
                     <div class="info-box">
                         <span>Клієнт</span>
-                        <strong>${order.surname || ""} ${order.name || ""} ${order.middleName || ""}</strong>
+                        <strong>${escapeHtml(order.surname)} ${escapeHtml(order.name)} ${escapeHtml(order.middleName)}</strong>
                     </div>
 
                     <div class="info-box">
                         <span>Телефон</span>
-                        <strong>${order.phone || "Не вказано"}</strong>
+                        <strong>${escapeHtml(order.phone || "Не вказано")}</strong>
                     </div>
 
                     <div class="info-box">
                         <span>Місто</span>
-                        <strong>${order.city || "Не вказано"}</strong>
+                        <strong>${escapeHtml(order.city || "Не вказано")}</strong>
                     </div>
 
                     <div class="info-box">
                         <span>Відділення</span>
-                        <strong>${order.warehouse || "Не вказано"}</strong>
+                        <strong>${escapeHtml(order.warehouse || "Не вказано")}</strong>
                     </div>
 
                     <div class="info-box">
                         <span>Оплата</span>
-                        <strong>${order.paymentMethod || "Не вказано"}</strong>
+                        <strong>${escapeHtml(order.paymentMethod || "Не вказано")}</strong>
                     </div>
 
                     <div class="info-box">
                         <span>Сума</span>
-                        <strong class="total">${order.total || 0} ₴</strong>
+                        <strong class="total">${Number(order.total || 0)} ₴</strong>
                     </div>
 
                     <div class="info-box items-box">
                         <span>Товари</span>
-                        <p>${order.items || "Немає даних"}</p>
+                        <p>${escapeHtml(order.items || "Немає даних")}</p>
                     </div>
 
                     <div class="info-box items-box">
                         <span>Коментар</span>
-                        <p>${order.comment || "Без коментаря"}</p>
+                        <p>${escapeHtml(order.comment || "Без коментаря")}</p>
                     </div>
 
                     ${
@@ -205,7 +594,7 @@ function renderOrders(orders) {
                         ? `
                             <div class="info-box items-box">
                                 <span>Помилка Telegram</span>
-                                <p>${order.telegramError}</p>
+                                <p>${escapeHtml(order.telegramError)}</p>
                             </div>
                         `
                         : ""
@@ -225,16 +614,49 @@ function renderOrders(orders) {
                         Зберегти статус
                     </button>
 
-                    <button class="telegram-btn" onclick="resendTelegram('${order._id}')">
-                        Надіслати в Telegram ще раз
+                    <button class="copy-btn" onclick="copyOrderInfo('${order._id}')">
+                        Копіювати дані
                     </button>
+
+                    <button class="telegram-btn" onclick="resendTelegram('${order._id}')">
+                        Telegram ще раз
+                    </button>
+
                     <button class="delete-btn" onclick="deleteOrder('${order._id}')">
-    Видалити замовлення
-</button>
+                        Видалити
+                    </button>
                 </div>
             </div>
         `;
     }).join("");
+}
+
+async function loadOrders() {
+    try {
+        const response = await fetch(`${API_URL}/api/admin/orders`, {
+            headers: {
+                Authorization: "Bearer " + token
+            }
+        });
+
+        const data = await response.json();
+
+        if (!response.ok || !data.success) {
+            throw new Error(data.message || "Не вдалося завантажити замовлення");
+        }
+
+        orders = Array.isArray(data.orders) ? data.orders : [];
+
+        updateStats();
+        renderOrders();
+    } catch (error) {
+        ordersList.innerHTML = `
+            <div class="empty">
+                <h2>Помилка</h2>
+                <p>${escapeHtml(error.message)}</p>
+            </div>
+        `;
+    }
 }
 
 async function updateStatus(orderId) {
@@ -252,8 +674,10 @@ async function updateStatus(orderId) {
     const data = await response.json();
 
     if (response.ok && data.success) {
+        orders = orders.map(order => order._id === orderId ? data.order : order);
+        updateStats();
+        renderOrders();
         alert("Статус оновлено");
-        loadOrders();
     } else {
         alert(data.message || "Помилка оновлення статусу");
     }
@@ -277,10 +701,34 @@ async function resendTelegram(orderId) {
     }
 }
 
-async function deleteOrder(orderId) {
-    const confirmed = confirm("Точно видалити це замовлення?");
+function copyOrderInfo(orderId) {
+    const order = orders.find(item => item._id === orderId);
 
-    if (!confirmed) return;
+    if (!order) return;
+
+    const text = `
+Замовлення №${getVisibleNumber(order)}
+Клієнт: ${order.surname || ""} ${order.name || ""} ${order.middleName || ""}
+Телефон: ${order.phone || ""}
+Місто: ${order.city || ""}
+Відділення: ${order.warehouse || ""}
+Оплата: ${order.paymentMethod || ""}
+Сума: ${order.total || 0} ₴
+
+Товари:
+${order.items || ""}
+
+Коментар:
+${order.comment || "Без коментаря"}
+`.trim();
+
+    navigator.clipboard.writeText(text)
+        .then(() => alert("Дані замовлення скопійовано"))
+        .catch(() => alert("Не вдалося скопіювати"));
+}
+
+async function deleteOrder(orderId) {
+    if (!confirm("Точно видалити це замовлення?")) return;
 
     const response = await fetch(`${API_URL}/api/admin/orders/${orderId}`, {
         method: "DELETE",
@@ -292,21 +740,18 @@ async function deleteOrder(orderId) {
     const data = await response.json();
 
     if (response.ok && data.success) {
+        orders = orders.filter(order => order._id !== orderId);
+        updateStats();
+        renderOrders();
         alert("Замовлення видалено");
-        loadOrders();
     } else {
         alert(data.message || "Помилка видалення замовлення");
     }
 }
 
 async function deleteAllOrders() {
-    const confirmed = confirm("Точно видалити ВСІ замовлення? Це не можна скасувати.");
-
-    if (!confirmed) return;
-
-    const secondConfirm = confirm("Останнє підтвердження: видалити всі замовлення назавжди?");
-
-    if (!secondConfirm) return;
+    if (!confirm("Точно видалити ВСІ замовлення? Це не можна скасувати.")) return;
+    if (!confirm("Останнє підтвердження: видалити всі замовлення назавжди?")) return;
 
     const response = await fetch(`${API_URL}/api/admin/orders`, {
         method: "DELETE",
@@ -318,8 +763,10 @@ async function deleteAllOrders() {
     const data = await response.json();
 
     if (response.ok && data.success) {
+        orders = [];
+        updateStats();
+        renderOrders();
         alert("Усі замовлення видалено");
-        loadOrders();
     } else {
         alert(data.message || "Помилка видалення всіх замовлень");
     }
@@ -330,6 +777,9 @@ function logout() {
     localStorage.removeItem("adminToken");
     window.location.href = "admin-login.html";
 }
+
+orderSearch.addEventListener("input", renderOrders);
+statusFilter.addEventListener("change", renderOrders);
 
 loadOrders();
 </script>
