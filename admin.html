@@ -449,14 +449,84 @@ async function uploadImage(file){
     }
 
     return uploadData.imageUrl;
-}
 
 async function loadProducts(){
+
     const response = await fetch(`${API_URL}/api/admin/products`, {
         headers: {
             "Authorization": "Bearer " + token
         }
     });
+
+    const data = await response.json();
+
+    if(!response.ok || !data.success){
+        alert(data.message || "Помилка завантаження товарів");
+        return;
+    }
+
+    const products = data.products || [];
+
+    const productsList = document.getElementById("productsList");
+
+    productsList.innerHTML = "";
+
+    products.forEach(product => {
+
+        productsList.innerHTML += `
+            <div class="product-item">
+
+                <img src="${product.image}" alt="${product.title}">
+
+                <div class="product-info">
+                    <h3>${product.title}</h3>
+
+                    <p>${product.category}</p>
+
+                    <span class="price-badge">
+                        ${product.price} ₴
+                    </span>
+
+                    <br>
+
+                    <span class="stock-badge">
+                        В наявності: ${product.stock || 0} шт.
+                    </span>
+
+                    ${
+                        product.variants && product.variants.length > 0
+                        ? `
+                            <div class="variant-tags">
+                                ${product.variants.map(variant => `
+                                    <span>${variant.name} — ${variant.stock || 0} шт.</span>
+                                `).join("")}
+                            </div>
+                        `
+                        : ""
+                    }
+                </div>
+
+                <div class="product-actions">
+                    <button
+                        class="edit-btn"
+                        onclick='editProduct(${JSON.stringify(product)})'
+                    >
+                        ✎ Редагувати
+                    </button>
+
+                    <button
+                        class="delete-btn"
+                        onclick="deleteProduct('${product._id}')"
+                    >
+                        ✕ Видалити
+                    </button>
+                </div>
+
+            </div>
+        `;
+    });
+}
+
     const products = await response.json();
 
     const productsList = document.getElementById("productsList");
