@@ -465,11 +465,11 @@ button:hover,
             </select>
 
             <div class="form-row">
-                <input type="number" id="price" placeholder="Актуальна ціна">
-                <input type="number" id="oldPrice" placeholder="Стара ціна">
+                <input type="text" inputmode="numeric" id="price" placeholder="Актуальна ціна">
+                <input type="text" inputmode="numeric" id="oldPrice" placeholder="Стара ціна">
             </div>
 
-            <input type="number" id="stock" placeholder="Загальна кількість товару">
+            <input type="text" inputmode="numeric" id="stock" placeholder="Загальна кількість товару">
 
             <div class="checks">
                 <label class="check-card">
@@ -496,8 +496,8 @@ button:hover,
 
             <textarea id="description" placeholder="Опис"></textarea>
 
-            <button class="add-btn" id="saveProductBtn" onclick="saveProduct()">Додати товар</button>
-            <button class="cancel-btn" id="cancelEditBtn" onclick="cancelEdit()" style="display:none;">Скасувати редагування</button>
+            <button type="button" class="add-btn" id="saveProductBtn" onclick="saveProduct()">Додати товар</button>
+            <button type="button" class="cancel-btn" id="cancelEditBtn" onclick="cancelEdit()" style="display:none;">Скасувати редагування</button>
         </div>
 
         <div class="card">
@@ -532,7 +532,15 @@ function escapeHtml(value) {
 }
 
 function getNumber(value) {
-    const number = Number(value);
+    const cleanValue = String(value || "")
+        .replaceAll(" ", "")
+        .replaceAll("₴", "")
+        .replaceAll("грн", "")
+        .replaceAll(",", ".")
+        .replace(/[^\d.]/g, "");
+
+    const number = Number(cleanValue);
+
     return Number.isNaN(number) ? 0 : number;
 }
 
@@ -618,8 +626,8 @@ function addVariantField(variant = null) {
                 <button type="button" class="variant-remove-btn" onclick="removeVariantField(this)">✕</button>
             </div>
 
-            <input type="number" class="variant-price" placeholder="Ціна цього варіанту" value="${escapeHtml(price)}">
-            <input type="number" class="variant-stock" placeholder="Кількість цього варіанту" value="${escapeHtml(stock)}">
+            <input type="text" inputmode="numeric" class="variant-price" placeholder="Ціна цього варіанту" value="${escapeHtml(price)}">
+            <input type="text" inputmode="numeric" class="variant-stock" placeholder="Кількість цього варіанту" value="${escapeHtml(stock)}">
             <input type="file" class="variant-image" accept="image/*">
         </div>
     `);
