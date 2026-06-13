@@ -483,7 +483,7 @@ button:hover,
                 </label>
             </div>
 
-            <input type="file" id="imageFile" accept="image/*" multiple>
+            <input type="file" id="imageFile" multiple>
             <small class="small-help">Можна додати до 5 фото товару. Перше фото буде головним.</small>
 
             <div class="images-preview" id="imagesPreview"></div>
@@ -628,7 +628,7 @@ function addVariantField(variant = null) {
 
             <input type="text" inputmode="numeric" class="variant-price" placeholder="Ціна цього варіанту" value="${escapeHtml(price)}">
             <input type="text" inputmode="numeric" class="variant-stock" placeholder="Кількість цього варіанту" value="${escapeHtml(stock)}">
-            <input type="file" class="variant-image" accept="image/*">
+            <input type="file" class="variant-image" >
         </div>
     `);
 }
